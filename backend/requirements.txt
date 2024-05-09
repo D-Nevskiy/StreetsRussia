@@ -8,3 +8,4 @@ psycopg2-binary==2.9.3
 python-dotenv==1.0.0
 reportlab==3.6.12
 python-dotenv==1.0.1
+drf-yasg==1.21.7
