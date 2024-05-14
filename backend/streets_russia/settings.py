@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
+    'news.apps.NewsConfig',
 ]
 
 MIDDLEWARE = [
