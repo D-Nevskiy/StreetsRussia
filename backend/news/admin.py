@@ -20,8 +20,6 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ['id',
                     'title',
                     'link',
-                    'start_date',
-                    'end_date',
                     'age_restriction',
                     'created_at',
                     ]
