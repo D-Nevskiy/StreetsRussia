@@ -23,7 +23,6 @@ class NewsSerializer(serializers.ModelSerializer):
             'link',
             'age_restriction',
             'images',
-            'created_at',
         )
 
     def create(self, validated_data):
