@@ -9,7 +9,8 @@ from core.constants.events import (
     LEN_PLAN,
     LEN_TYPE_AREA,
     LEN_ADDRESS,
-    TYPE_AREA
+    TYPE_AREA,
+    ALLOWED_EXTENSIONS
 )
 
 
@@ -30,7 +31,7 @@ class GalleryEvent(models.Model):
         help_text='Загрузите файл.',
         validators=[
             FileExtensionValidator(
-                ['png', 'jpg', 'jpeg', 'avi', 'mp4', 'mov', 'webm']),
+                ALLOWED_EXTENSIONS),
             validate_size_file
 
         ],
@@ -179,7 +180,7 @@ class Event(models.Model):
         default=False
     )
     organizers_contact = models.JSONField(
-        models.URLField('Связь с организатором'),
+        'Связь с организатором',
         blank=True,
         null=True,
         help_text='Введите ссылку на связь с организаторами'

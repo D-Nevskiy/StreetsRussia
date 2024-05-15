@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from core.constants.events import MAX_FILE_SIZE
 
 
 def validate_size_file(value):
@@ -13,12 +14,11 @@ def validate_size_file(value):
     ValidationError: Возникает в случае превышения размера файла.
     """
     filesize = value.size
-    max_file_size = 10 * 1024 * 1024  # 10 MB
 
-    if filesize > max_file_size:
+    if filesize > MAX_FILE_SIZE:
         raise ValidationError(
             f'Превышен максимальный размер файла - '
-            f'{max_file_size / (1024 * 1024)} MB'
+            f'{MAX_FILE_SIZE / (1024 * 1024)} MB'
         )
 
 

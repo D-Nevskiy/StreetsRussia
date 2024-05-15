@@ -1,3 +1,5 @@
+from typing import List
+
 LEN_TITLE: int = 150
 LEN_DESCRIPTION: int = 10000
 LEN_DISCTIPLINE: int = 15
@@ -9,3 +11,5 @@ TYPE_AREA = [
     ('OPEN', 'Открытая'),
     ('CLOSED', 'Закрытая'),
 ]
+MAX_FILE_SIZE: int = 10 * 1024 * 1024
+ALLOWED_EXTENSIONS: List[str] = []
