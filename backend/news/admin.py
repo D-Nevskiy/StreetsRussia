@@ -1,5 +1,5 @@
 from django.contrib import admin
-from news.models import News, NewsImage, Category
+from news.models import News, GalleryNews, Category
 
 
 class NewsImageInline(admin.TabularInline):
@@ -8,21 +8,20 @@ class NewsImageInline(admin.TabularInline):
     предназначенная для отображения и редактирования изображений
     связанных с моделью News.
     """
-    model = NewsImage
+    model = GalleryNews
     extra = 5
 
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
     """
-    Конфигурация модели Advertisement для административной панели.
+    Конфигурация модели News для административной панели.
     """
-    list_display = ['id',
-                    'title',
-                    'link',
-                    'age_restriction',
-                    'created_at',
-                    ]
+    list_display = [
+        'id',
+        'title',
+        'created_at',
+    ]
 
     list_filter = ('title', 'category')
     inlines = [NewsImageInline]
@@ -37,10 +36,10 @@ class CategoryAdmin(admin.ModelAdmin):
     list_filter = ('name', )
 
 
-@admin.register(NewsImage)
-class NewsImageAdmin(admin.ModelAdmin):
+@admin.register(GalleryNews)
+class GalleryNewsAdmin(admin.ModelAdmin):
     """
-    Конфигурация модели NewsImage для административной панели.
+    Конфигурация модели GalleryNews для административной панели.
     """
-    list_display = ['news', 'image']
+    list_display = ['news', 'file']
     list_filter = ('news', )

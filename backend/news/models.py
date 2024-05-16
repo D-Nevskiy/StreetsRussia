@@ -31,7 +31,7 @@ class News(models.Model):
     description = models.TextField(verbose_name='Описание')
     city = models.ForeignKey(
         City,
-        related_name='events',
+        related_name='news',
         on_delete=models.CASCADE,
         verbose_name='Город проведения',
         help_text='Выберите город'
@@ -90,9 +90,7 @@ class GalleryNews(models.Model):
             FileExtensionValidator(
                 ALLOWED_EXTENSIONS),
             validate_size_file
-
-        ],
-
+        ]
     )
     news = models.ForeignKey(
         News,
