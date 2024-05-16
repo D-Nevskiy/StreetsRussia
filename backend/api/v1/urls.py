@@ -1,10 +1,10 @@
+from rest_framework.routers import SimpleRouter
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
 
-from api.v1.views import NewsViewSet, CategoryViewSet
+from api.v1.views import NewsViewSet, CategoryViewSet, EventViewSet
 
-
-router = DefaultRouter()
+router = SimpleRouter()
+router.register('events', EventViewSet, basename='events')
 router.register('news', NewsViewSet, basename='news')
 router.register('category', CategoryViewSet, basename='category')
 
