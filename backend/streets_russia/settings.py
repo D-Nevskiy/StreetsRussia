@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'events.apps.EventsConfig',
+    'news.apps.NewsConfig',
 ]
 
 MIDDLEWARE = [

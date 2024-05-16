@@ -1,7 +1,14 @@
 from rest_framework import viewsets
-from events.models import Event
-from .serializers import EventSerializer, EventSmallReadSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+
+from events.models import Event
+from news.models import News, Category
+from api.v1.serializers import (
+    CategorySerializer,
+    NewsSerializer,
+    EventSerializer,
+    EventSmallReadSerializer
+)
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -18,3 +25,15 @@ class EventViewSet(viewsets.ModelViewSet):
         elif self.action == 'retrieve':
             return EventSerializer
         return EventSerializer
+
+
+class NewsViewSet(viewsets.ModelViewSet):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filterset_fields = ('category', )
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
