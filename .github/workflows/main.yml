@@ -46,5 +46,6 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
+          context: backend/
           push: true
           tags: dnevskiy/streets_backend:latest
