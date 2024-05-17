@@ -1,17 +1,10 @@
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from core.validators import validate_size_file, validate_date
-from core.constants.events import (
-    LEN_TITLE,
-    LEN_DESCRIPTION,
-    LEN_DISCTIPLINE,
-    LEN_CITY,
-    LEN_PLAN,
-    LEN_TYPE_AREA,
-    LEN_ADDRESS,
-    TYPE_AREA,
-    ALLOWED_EXTENSIONS
-)
+
+from core.constants.events import (ALLOWED_EXTENSIONS, LEN_ADDRESS, LEN_CITY,
+                                   LEN_DESCRIPTION, LEN_DISCTIPLINE, LEN_PLAN,
+                                   LEN_TITLE, LEN_TYPE_AREA, TYPE_AREA)
+from core.validators import validate_date, validate_size_file
 
 
 class GalleryEvent(models.Model):

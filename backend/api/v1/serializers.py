@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from events.models import Event, GalleryEvent
-from news.models import News, GalleryNews, Category
+from news.models import Category, GalleryNews, News
 
 
 class GalleryEventSerializer(serializers.ModelSerializer):
@@ -67,7 +67,11 @@ class GalleryNewsSerializer(serializers.ModelSerializer):
 
 
 class NewsSerializer(serializers.ModelSerializer):
-    files = GalleryNewsSerializer(many=True, read_only=True, source='news_images')
+    files = GalleryNewsSerializer(
+        many=True,
+        read_only=True,
+        source='news_images'
+    )
 
     class Meta:
         model = News

@@ -1,6 +1,5 @@
 from typing import List
 
-
 LEN_TITLE: int = 150
 
 LEN_CATEGORY_NAME: int = 20

@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+
 from core.constants.events import MAX_FILE_SIZE
 
 

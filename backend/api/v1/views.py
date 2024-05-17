@@ -1,14 +1,10 @@
-from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
 
+from api.v1.serializers import (CategorySerializer, EventSerializer,
+                                EventSmallReadSerializer, NewsSerializer)
 from events.models import Event
-from news.models import News, Category
-from api.v1.serializers import (
-    CategorySerializer,
-    NewsSerializer,
-    EventSerializer,
-    EventSmallReadSerializer
-)
+from news.models import Category, News
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -22,7 +18,7 @@ class EventViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return EventSmallReadSerializer
-        elif self.action == 'retrieve':
+        if self.action == 'retrieve':
             return EventSerializer
         return EventSerializer
 

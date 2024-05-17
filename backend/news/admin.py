@@ -1,5 +1,6 @@
 from django.contrib import admin
-from news.models import News, GalleryNews, Category
+
+from news.models import Category, GalleryNews, News
 
 
 class NewsImageInline(admin.TabularInline):

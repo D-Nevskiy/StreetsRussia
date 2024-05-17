@@ -1,15 +1,12 @@
 from datetime import datetime
 
-from django.db import models
 from django.core.validators import FileExtensionValidator
+from django.db import models
 
-from events.models import City
+from core.constants.news import (ALLOWED_EXTENSIONS, LEN_CATEGORY_NAME,
+                                 LEN_TITLE)
 from core.validators import validate_size_file
-from core.constants.news import (
-    LEN_TITLE,
-    LEN_CATEGORY_NAME,
-    ALLOWED_EXTENSIONS,
-)
+from events.models import City
 
 
 class News(models.Model):

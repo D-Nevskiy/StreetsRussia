@@ -1,12 +1,13 @@
 from django.contrib import admin
 
-from .models import Event, City, Discipline, GalleryEvent
+from .models import City, Discipline, Event, GalleryEvent
 
 
 class GalleryEventInline(admin.TabularInline):
     """
     Inline-класс для отображения галереи мероприятия в админ панели.
-    Этот класс позволяет отображать галерею мероприятия в виде таблицы в админ панели.
+    Этот класс позволяет отображать галерею мероприятия
+    в виде таблицы в админ панели.
     """
     model = GalleryEvent
 
