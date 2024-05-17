@@ -109,6 +109,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
 
 # Spyder project settings
 .spyderproject

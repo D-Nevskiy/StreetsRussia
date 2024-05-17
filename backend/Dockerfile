@@ -10,4 +10,4 @@ COPY . /app
 
 WORKDIR /app
 
-CMD ["python", "manage.py", "runserver"]
+CMD ["gunicorn", "streets_russia.wsgi:application", "--bind", "0:8000" ]
