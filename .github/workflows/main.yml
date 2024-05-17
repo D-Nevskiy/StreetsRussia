@@ -26,8 +26,8 @@ jobs:
         run:
           python -m flake8 --config backend/setup.cfg
 
-  build_and_push_to_docker_hub:
-    name: Push Docker image to Docker Hub
+  build_backend_and_push_to_docker_hub:
+    name: Push Docker image backend to Docker Hub
     runs-on: ubuntu-latest
     needs: test_flake8
     steps:
@@ -49,3 +49,27 @@ jobs:
           context: backend/
           push: true
           tags: dnevskiy/streets_backend:latest
+
+  build_nginx_and_push_to_docker_hub:
+    name: Push Docker image nginx to Docker Hub
+    runs-on: ubuntu-latest
+    needs: build_backend_and_push_to_docker_hub
+    steps:
+      - name: Check out the repo DockerHub
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/nginx/
+          push: true
+          tags: dnevskiy/streets_nginx:latest
