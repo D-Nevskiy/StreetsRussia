@@ -1,5 +1,7 @@
-from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.core import validators
+from django.core.exceptions import ValidationError
+
 from core.constants.events import MAX_FILE_SIZE
 
 
@@ -36,3 +38,11 @@ def validate_date(value):
         raise ValidationError(
             "Дата мероприятия не может быть прошедшей"
         )
+
+
+class PhoneNumberValidator(validators.RegexValidator):
+    regex = r'^(\+7|7|8)?[10]\d{10}$'
+    message = (
+        'Пожалуйста, введите правильный номер телефона'
+    )
+    flags = 0
