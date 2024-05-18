@@ -14,7 +14,8 @@ from api.v1.serializers import (
     EventSerializer,
     EventSmallReadSerializer,
     UserAccountSerializer,
-    ChangePasswordSerializer
+    ChangePasswordSerializer,
+    UserApprovalSerializer
 )
 
 
@@ -128,6 +129,7 @@ class UserProfileView(generics.RetrieveAPIView):
 class UserApprovalView(generics.UpdateAPIView):
     queryset = UserAccount.objects.all()
     permission_classes = [permissions.IsAdminUser]
+    serializer_class = UserApprovalSerializer
 
     def patch(self, request, *args, **kwargs):
         user = self.get_object()

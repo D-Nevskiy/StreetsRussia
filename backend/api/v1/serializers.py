@@ -142,3 +142,9 @@ class ChangePasswordSerializer(serializers.Serializer):
             )
 
         return attrs
+
+
+class UserApprovalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
+        fields = ['id', 'status']
