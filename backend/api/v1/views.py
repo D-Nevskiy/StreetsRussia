@@ -38,8 +38,8 @@ class EventViewSet(viewsets.ModelViewSet):
 class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
-    filter_backends = (DjangoFilterBackend, )
-    filterset_fields = ('category', )
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('category',)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -54,10 +54,10 @@ class SignupView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            serializer.save()
             return Response(
-                {'message':  'Когда ваши данные будут проверены. \
-                    Вы получите электронное письмо с вашим паролем.'},
+                {'message': 'Когда ваши данные будут проверены. '
+                            'Вы получите электронное письмо с вашим паролем.'},
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -101,7 +101,7 @@ class ChangePasswordView(generics.UpdateAPIView):
 
         if serializer.is_valid():
             if not self.objects.check_password(
-                serializer.data.get('old_password')
+                    serializer.data.get('old_password')
             ):
                 return Response(
                     {'old_password': 'Wrong password.'},
@@ -136,8 +136,9 @@ class UserApprovalView(generics.UpdateAPIView):
         if user.status == UserAccount.Status.UNCONFIRMED:
             UserAccount.objects.approve_user(user)
             return Response(
-                {'message': 'Данные пользователя верны. Пользователь одобрен. \
-                    Временный пароль отправлен на электронную почту.'},
+                {'message': 'Данные пользователя верны. '
+                            'Пользователь одобрен. Временный пароль отправлен '
+                            'на электронную почту.'},
                 status=status.HTTP_200_OK
             )
         return Response(

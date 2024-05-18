@@ -4,7 +4,6 @@ from django.contrib.auth.password_validation import validate_password
 from events.models import Event, GalleryEvent
 from news.models import News, GalleryNews, Category
 from user.models import UserAccount
-from core.validators import PhoneNumberValidator
 
 
 class GalleryEventSerializer(serializers.ModelSerializer):
@@ -63,10 +62,9 @@ class EventSmallReadSerializer(EventSerializer):
 
 
 class GalleryNewsSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = GalleryNews
-        fields = ('id', 'file', )
+        fields = ('id', 'file',)
 
 
 class NewsSerializer(serializers.ModelSerializer):
@@ -99,10 +97,9 @@ class NewsSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Category
-        fields = ('id', 'name', )
+        fields = ('id', 'name',)
 
 
 class UserAccountSerializer(serializers.ModelSerializer):

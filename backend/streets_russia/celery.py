@@ -2,7 +2,8 @@ import os
 
 from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'streets_russia.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                      'streets_russia.settings')
 
 app = Celery('streets_russia')
 
