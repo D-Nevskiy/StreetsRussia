@@ -2,17 +2,34 @@ version: '3.8'
 
 services:
   db:
+    container_name: street_russia-db
     image: postgres:13.0-alpine
     volumes:
-      - /var/lib/postgresql/data/
+      - db_data:/var/lib/postgresql/data/
     env_file:
       - .env
   web:
-    build: ../backend/
-    restart: always
-    ports:
-     - "8000:8000"
+    container_name: street_russia-backend
     depends_on:
       - db
+    restart: always
+    image: dnevskiy/streets_backend
+    volumes:
+      - static:/app/static/
     env_file:
       - .env
+
+  nginx:
+    container_name: street_russia-nginx
+    depends_on:
+      - web
+    restart: always
+    image: dnevskiy/streets_nginx
+    volumes:
+      - static:/app/static/
+    ports:
+      - "8500:80"
+
+volumes:
+  static:
+  db_data:
