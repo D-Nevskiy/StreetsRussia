@@ -1,0 +1,103 @@
+name: StreetsRussia workflow
+
+on:
+  push:
+    branches: [ dev ]
+
+
+jobs:
+  test_flake8:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
+          pip install -r backend/requirements.txt
+
+      - name: Test flake8
+        run:
+          python -m flake8 --config backend/setup.cfg
+
+  build_backend_and_push_to_docker_hub:
+    name: Push Docker image backend to Docker Hub
+    runs-on: ubuntu-latest
+    needs: test_flake8
+    steps:
+      - name: Check out the repo DockerHub
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: backend/
+          push: true
+          tags: dnevskiy/streets_backend:latest
+
+  build_nginx_and_push_to_docker_hub:
+    name: Push Docker image nginx to Docker Hub
+    runs-on: ubuntu-latest
+    needs: build_backend_and_push_to_docker_hub
+    steps:
+      - name: Check out the repo DockerHub
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Docker
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: nginx/
+          push: true
+          tags: dnevskiy/streets_nginx:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_nginx_and_push_to_docker_hub
+    steps:
+      - name: exec remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            sudo docker-compose pull
+            sudo docker compose down
+            touch .env
+            echo DB_ENGINE=${{ secrets.DEBUG }} >> .env
+            echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
+            echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+            echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+            echo ALLOWED_HOST=${{ secrets.ALLOWED_HOST }} >> .env
+            echo USE_S3=${{ secrets.USE_S3 }} >> .env
+            sudo docker-compose up -d
+            sudo docker compose exec web python manage.py makemigrations events news
+            sudo docker compose exec web python manage.py migrate

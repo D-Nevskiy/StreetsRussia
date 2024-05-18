@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
+
 from .yasg_setting import urlpatterns as yasg_setting_urls
 
 urlpatterns = [

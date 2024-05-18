@@ -70,7 +70,11 @@ class GalleryNewsSerializer(serializers.ModelSerializer):
 
 
 class NewsSerializer(serializers.ModelSerializer):
-    files = GalleryNewsSerializer(many=True, read_only=True, source='news_images')
+    files = GalleryNewsSerializer(
+        many=True,
+        read_only=True,
+        source='news_images'
+    )
 
     class Meta:
         model = News
