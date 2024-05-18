@@ -1,7 +1,9 @@
 from rest_framework import serializers
+from django.contrib.auth.password_validation import validate_password
 
 from events.models import Event, GalleryEvent
-from news.models import Category, GalleryNews, News
+from news.models import News, GalleryNews, Category
+from user.models import UserAccount
 
 
 class GalleryEventSerializer(serializers.ModelSerializer):
@@ -60,10 +62,9 @@ class EventSmallReadSerializer(EventSerializer):
 
 
 class GalleryNewsSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = GalleryNews
-        fields = ('id', 'file', )
+        fields = ('id', 'file',)
 
 
 class NewsSerializer(serializers.ModelSerializer):
@@ -96,7 +97,55 @@ class NewsSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Category
-        fields = ('id', 'name', )
+        fields = ('id', 'name',)
+
+
+class UserAccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
+        fields = [
+            'email',
+            'first_name',
+            'last_name',
+            'middle_name',
+            'date_of_birth',
+            'phone_number',
+            'city',
+            'passport_series',
+            'passport_number',
+            'passport_issue_date',
+            'passport_issued_by',
+            'consent_to_rights',
+            'сonsent_to_processing'
+        ]
+
+    def create(self, validated_data):
+        return UserAccount.objects.create_user(**validated_data)
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(
+        required=True,
+        validators=[validate_password]
+    )
+    new_password_confirm = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        new_password = attrs.get('new_password')
+        new_password_confirm = attrs.get('new_password_confirm')
+
+        if new_password != new_password_confirm:
+            raise serializers.ValidationError(
+                {'message': 'Пароли не совпадают.'}
+            )
+
+        return attrs
+
+
+class UserApprovalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
+        fields = ['id', 'status']
