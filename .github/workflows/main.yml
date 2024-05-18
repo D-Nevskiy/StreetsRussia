@@ -85,7 +85,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          script:
+          script: |
             sudo docker-compose pull
             sudo docker compose down
             touch .env
