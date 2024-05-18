@@ -1,14 +1,22 @@
-from rest_framework import viewsets, views, permissions
 from rest_framework import generics, status
+from rest_framework import viewsets, views, permissions
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from django_filters.rest_framework import DjangoFilterBackend
 
-from api.v1.serializers import (CategorySerializer, EventSerializer,
-                                EventSmallReadSerializer, NewsSerializer)
 from events.models import Event
 from news.models import Category, News
+from user.models import UserAccount
+from api.v1.serializers import (
+    CategorySerializer,
+    NewsSerializer,
+    EventSerializer,
+    EventSmallReadSerializer,
+    UserAccountSerializer,
+    ChangePasswordSerializer,
+    UserApprovalSerializer
+)
 
 
 class EventViewSet(viewsets.ModelViewSet):

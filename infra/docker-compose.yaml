@@ -8,6 +8,7 @@ services:
       - db_data:/var/lib/postgresql/data/
     env_file:
       - .env
+
   web:
     container_name: street_russia-backend
     depends_on:
@@ -18,6 +19,29 @@ services:
       - static:/app/static/
     env_file:
       - .env
+
+  celery:
+    image: dnevskiy/streets_backend
+    command: celery -A streets_russia worker --loglevel=info
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=streets_russia.settings
+      - CELERY_BROKER_URL=redis://redis:6379/0
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
 
   nginx:
     container_name: street_russia-nginx
