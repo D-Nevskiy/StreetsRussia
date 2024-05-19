@@ -25,9 +25,6 @@ services:
     command: celery -A streets_russia worker --loglevel=info
     depends_on:
       - redis
-    environment:
-      - DJANGO_SETTINGS_MODULE=streets_russia.settings
-      - CELERY_BROKER_URL=redis://redis:6379/0
 
   redis:
     image: redis:latest
