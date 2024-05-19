@@ -34,11 +34,6 @@ services:
   redis:
     image: redis:latest
 
-  mailhog:
-    image: mailhog/mailhog
-    container_name: mailhog
-
-
   nginx:
     container_name: street_russia-nginx
     depends_on:
