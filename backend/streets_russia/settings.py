@@ -25,12 +25,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
-    'drf_yasg',
     'django_filters',
+    'drf_yasg',
     'events.apps.EventsConfig',
     'news.apps.NewsConfig',
     'user.apps.UserConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -116,16 +116,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {
-        'basic': {
-            'type': 'basic'
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
         }
     },
+    'DEFAULT_API_URL': 'https://streetsrussia.sytes.net',
 }
-CORS_ALLOW_ALL_ORIGINS = True
-
-
-CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
-CORS_ALLOW_CREDENTIALS = True
 
 AUTH_USER_MODEL = 'user.UserAccount'
 
@@ -134,6 +132,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
+
+CORS_ALLOWED_ORIGINS = [
+    'https://streetsrussia.sytes.net',
+]
 
 # SMTP YANDEX
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
