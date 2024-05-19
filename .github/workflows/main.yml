@@ -88,6 +88,7 @@ jobs:
           script: |
             sudo docker-compose pull
             sudo docker compose down
+            rm .env
             touch .env
             echo DB_ENGINE=${{ secrets.DEBUG }} >> .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
@@ -97,7 +98,6 @@ jobs:
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo ALLOWED_HOST=${{ secrets.ALLOWED_HOST }} >> .env
-            echo USE_S3=${{ secrets.USE_S3 }} >> .env
             echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env
             echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env
             echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .env
