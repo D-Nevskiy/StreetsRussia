@@ -114,13 +114,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header'
         }
-    }
+    },
+    'DEFAULT_API_URL': 'https://streetsrussia.sytes.net',
 }
 
 AUTH_USER_MODEL = 'user.UserAccount'
@@ -131,9 +133,8 @@ REST_FRAMEWORK = {
     ),
 }
 
-# CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    'https://streetsrussia.sytes.net'
+    'https://streetsrussia.sytes.net',
 ]
 
 # SMTP YANDEX
