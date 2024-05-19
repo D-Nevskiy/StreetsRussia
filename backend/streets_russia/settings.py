@@ -134,7 +134,7 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "https://streetsrussia.sytes.net",
+    'https://streetsrussia.sytes.net',
 ]
 
 # SMTP YANDEX
