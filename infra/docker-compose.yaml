@@ -23,8 +23,6 @@ services:
   celery:
     image: dnevskiy/streets_backend
     command: celery -A streets_russia worker --loglevel=info
-    volumes:
-      - ./backend:/app
     depends_on:
       - redis
     environment:
