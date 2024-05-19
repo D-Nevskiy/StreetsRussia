@@ -30,11 +30,13 @@ INSTALLED_APPS = [
     'events.apps.EventsConfig',
     'news.apps.NewsConfig',
     'user.apps.UserConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -128,6 +130,11 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
+
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    'https://streetsrussia.sytes.net'
+]
 
 # SMTP YANDEX
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

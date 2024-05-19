@@ -11,3 +11,4 @@ drf-yasg==1.21.7
 pillow==10.3.0
 celery==5.4.0
 redis==5.0.4
+django-cors-headers==4.3.1
