@@ -1,50 +1,12 @@
-from rest_framework import generics, status
-from rest_framework import viewsets, views, permissions
-from rest_framework.response import Response
+from rest_framework import generics, permissions, status, views
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
-from django_filters.rest_framework import DjangoFilterBackend
-
-from events.models import Event
-from news.models import Category, News
+from rest_framework.response import Response
 from user.models import UserAccount
-from api.v1.serializers import (
-    CategorySerializer,
-    NewsSerializer,
-    EventSerializer,
-    EventSmallReadSerializer,
-    UserAccountSerializer,
-    ChangePasswordSerializer,
-    UserApprovalSerializer
-)
 
-
-class EventViewSet(viewsets.ModelViewSet):
-    serializer_class = EventSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('discipline_of_event', 'date', 'city')
-
-    def get_queryset(self):
-        return Event.objects.filter(is_moderation=True)
-
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return EventSmallReadSerializer
-        if self.action == 'retrieve':
-            return EventSerializer
-        return EventSerializer
-
-
-class NewsViewSet(viewsets.ModelViewSet):
-    queryset = News.objects.all()
-    serializer_class = NewsSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('category',)
-
-
-class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+from api.v1.serializers.user import (ChangePasswordSerializer,
+                                     UserAccountSerializer,
+                                     UserApprovalSerializer)
 
 
 class SignupView(generics.CreateAPIView):

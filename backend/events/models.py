@@ -290,6 +290,7 @@ class Event(BaseModel):
         discipline (ForeignKey): Дисциплина мероприятия.
         sub_discipline (ForeignKey): Тип субдисциплины мероприятия.
         type_of_event (ForeignKey): Тип мероприятия.
+        location (ForeignKey): Локация мероприятия.
         is_moderation (BooleanField): Флаг модерации мероприятия.
         organizers_contact (JSONField): Дополнительные поля в формате JSON.
         author (ForeignKey): Автор мероприятия.
@@ -372,7 +373,7 @@ class Event(BaseModel):
         verbose_name_plural = 'Мероприятия'
 
     def __str__(self):
-        return f'{self.region.name}: {self.title}'
+        return f'{self.location.region.name}: {self.title}'
 
     def clean(self):
         if self.start_datetime and self.end_datetime:
