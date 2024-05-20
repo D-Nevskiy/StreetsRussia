@@ -68,6 +68,7 @@ class TypeEventAdmin(admin.ModelAdmin):
     """
     pass
 
+
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
     """

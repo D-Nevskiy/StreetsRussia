@@ -1,24 +1,23 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
-from django.core.exceptions import ValidationError
 
+from core.base_model import BaseModel
 from core.constants.events import (
-    LEN_TITLE,
+    ALLOWED_EXTENSIONS,
+    LEN_ADDRESS,
+    LEN_CITY_NAME,
     LEN_DESCRIPTION,
     LEN_DISCIPLINE_NAME,
-    LEN_SUBDISCTIPLINE_NAME,
-    LEN_SUBDISCTIPLINE_NAME,
-    LEN_TYPE_EVENT_NAME,
-    LEN_CITY_NAME,
     LEN_REGION_NAME,
+    LEN_SUBDISCTIPLINE_NAME,
+    LEN_TITLE,
     LEN_TYPE_AREA_NAME,
-    LEN_ADDRESS,
-    TYPE_AREA,
-    ALLOWED_EXTENSIONS
+    LEN_TYPE_EVENT_NAME,
+    TYPE_AREA
 )
 from core.validators import validate_size_file
-from core.base_model import BaseModel
 from user.models import UserAccount
 
 
@@ -277,7 +276,6 @@ class Location(BaseModel):
             raise ValidationError(
                 'Город должен принадлежать региону'
             )
-
 
 
 class Event(BaseModel):
