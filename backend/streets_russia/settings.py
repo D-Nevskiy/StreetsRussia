@@ -25,12 +25,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
     'django_filters',
     'drf_yasg',
     'events.apps.EventsConfig',
     'news.apps.NewsConfig',
     'user.apps.UserConfig',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [

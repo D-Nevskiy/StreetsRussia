@@ -24,22 +24,6 @@ def validate_size_file(value):
         )
 
 
-def validate_date(value):
-    """
-    Валидирует дату.
-
-    Параметры:
-    value (str) - Строка с датой
-
-    Исключения:
-    ValidationError: Возникает в если вводимая дата прошедшая.
-    """
-    if value < timezone.now().date():
-        raise ValidationError(
-            "Дата мероприятия не может быть прошедшей"
-        )
-
-
 class PhoneNumberValidator(validators.RegexValidator):
     regex = r'^(\+7|7|8)?[10]\d{10}$'
     message = (

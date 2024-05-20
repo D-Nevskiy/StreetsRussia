@@ -1,6 +1,15 @@
 from django.contrib import admin
 
-from .models import City, Discipline, Event, GalleryEvent
+from .models import (
+    City,
+    Discipline,
+    Event,
+    GalleryEvent,
+    SubDiscipline,
+    Region,
+    TypeEvent,
+    Location
+)
 
 
 class GalleryEventInline(admin.TabularInline):
@@ -32,5 +41,36 @@ class DisciplineAdmin(admin.ModelAdmin):
 class CityAdmin(admin.ModelAdmin):
     """
     Класс администратора для модели City.
+    """
+    pass
+
+
+@admin.register(SubDiscipline)
+class SubDisciplineAdmin(admin.ModelAdmin):
+    """
+    Класс администратора для модели SubDiscipline.
+    """
+    pass
+
+
+@admin.register(Region)
+class RegionAdmin(admin.ModelAdmin):
+    """
+    Класс администратора для модели Region.
+    """
+    pass
+
+
+@admin.register(TypeEvent)
+class TypeEventAdmin(admin.ModelAdmin):
+    """
+    Класс администратора для модели TypeEvent.
+    """
+    pass
+
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+    """
+    Класс администратора для модели Location.
     """
     pass
