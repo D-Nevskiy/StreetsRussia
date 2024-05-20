@@ -1,4 +1,3 @@
-from django.utils import timezone
 from django.core import validators
 from django.core.exceptions import ValidationError
 
@@ -21,22 +20,6 @@ def validate_size_file(value):
         raise ValidationError(
             f'Превышен максимальный размер файла - '
             f'{MAX_FILE_SIZE / (1024 * 1024)} MB'
-        )
-
-
-def validate_date(value):
-    """
-    Валидирует дату.
-
-    Параметры:
-    value (str) - Строка с датой
-
-    Исключения:
-    ValidationError: Возникает в если вводимая дата прошедшая.
-    """
-    if value < timezone.now().date():
-        raise ValidationError(
-            "Дата мероприятия не может быть прошедшей"
         )
 
 
