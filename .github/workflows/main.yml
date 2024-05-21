@@ -7,8 +7,8 @@ on:
 
 jobs:
   test_flake8:
+    name: Test backend code flake8
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
