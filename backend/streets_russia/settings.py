@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'storages',
     'corsheaders',
     'django_filters',
     'drf_yasg',
@@ -144,7 +145,6 @@ EMAIL_PORT = os.getenv('EMAIL_PORT', '555')
 EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'True')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'email@yandex.ru')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your_yandex_smtp_password')
-print(f"{EMAIL_HOST}:{EMAIL_PORT}")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
@@ -154,3 +154,15 @@ CELERY_TIMEZONE = "Europe/Moscow"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = 'redis://redis:6379/0'
+
+# S3
+USE_S3 = os.getenv('USE_S3', 'False')
+
+if USE_S3:
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', 'test')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', 'test')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', 'test')
+    AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL', 'test')
+    MEDIA_URL = f'{AWS_STORAGE_BUCKET_NAME}/media/'
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
