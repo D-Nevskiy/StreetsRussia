@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+
   db:
     container_name: street_russia-db
     image: postgres:13.0-alpine
@@ -14,34 +15,44 @@ services:
     depends_on:
       - db
     restart: always
-    image: dnevskiy/streets_backend
+    image: dnevskiy/streets_backend:latest
     volumes:
       - static:/app/static/
     env_file:
       - .env
 
   celery:
-    image: dnevskiy/streets_backend
+    image: dnevskiy/streets_backend:latest
     command: celery -A streets_russia worker --loglevel=info
     depends_on:
       - redis
-    env_file:
-      - .env
 
   redis:
     image: redis:latest
+
+  frontend:
+    container_name: street_russia-frontend
+    depends_on:
+      - web
+    image: dnevskiy/streets_frontend:latest
+    volumes:
+      - static_front:/app/dist/
+
 
   nginx:
     container_name: street_russia-nginx
     depends_on:
       - web
+      - frontend
     restart: always
-    image: dnevskiy/streets_nginx
+    image: dnevskiy/streets_nginx:latest
     volumes:
-      - static:/app/static/
+      - static:/var/html/static/
+      - static_front:/usr/share/nginx/html
     ports:
       - "8500:80"
 
 volumes:
   static:
+  static_front:
   db_data:
