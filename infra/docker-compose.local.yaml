@@ -29,6 +29,14 @@ services:
   redis:
     image: redis:latest
 
+  frontend:
+    container_name: street_russia-frontend
+    depends_on:
+      - web
+    build: ../frontend/
+    volumes:
+      - static_front:/app/dist/
+
   nginx:
     container_name: street_russia-nginx
     depends_on:

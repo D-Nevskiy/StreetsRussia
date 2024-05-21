@@ -15,14 +15,14 @@ services:
     depends_on:
       - db
     restart: always
-    build: ../backend/
+    image: dnevskiy/streets_backend:latest
     volumes:
       - static:/app/static/
     env_file:
       - .env
 
   celery:
-    build: ../backend/
+    image: dnevskiy/streets_backend:latest
     command: celery -A streets_russia worker --loglevel=info
     depends_on:
       - redis
@@ -45,7 +45,7 @@ services:
       - web
       - frontend
     restart: always
-    build: ../nginx/
+    image: dnevskiy/streets_nginx:latest
     volumes:
       - static:/var/html/static/
       - static_front:/usr/share/nginx/html
