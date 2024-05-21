@@ -144,7 +144,8 @@ EMAIL_HOST = os.getenv('EMAIL_HOST', 'host@yandex.ru')
 EMAIL_PORT = os.getenv('EMAIL_PORT', '555')
 EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'True')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'email@yandex.ru')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'your_yandex_smtp_password')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD',
+                                'your_yandex_smtp_password')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
@@ -165,4 +166,3 @@ if USE_S3:
     AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL', 'test')
     MEDIA_URL = f'{AWS_STORAGE_BUCKET_NAME}/media/'
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
