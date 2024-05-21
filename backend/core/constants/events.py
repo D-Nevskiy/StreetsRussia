@@ -14,5 +14,14 @@ TYPE_AREA = [
     ('CLOSED', 'Закрытая'),
 ]
 MAX_FILE_SIZE: int = 10 * 1024 * 1024
-ALLOWED_EXTENSIONS: List[str] = ['jpg', 'jpeg', 'png', 'gif',
-                                 'mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv']
+ALLOWED_EXTENSIONS: List[str] = [
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.mp4',
+    '.avi',
+    '.mov',
+    '.wmv',
+    '.flv',
+    '.mkv'
+]
