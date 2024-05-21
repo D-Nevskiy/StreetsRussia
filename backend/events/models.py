@@ -37,11 +37,8 @@ class GalleryEvent(BaseModel):
         upload_to='files_events/',
         help_text='Загрузите файл.',
         validators=[
-            FileExtensionValidator(
-                ALLOWED_EXTENSIONS
-            ),
-            validate_size_file
-        ],
+            FileExtensionValidator(ALLOWED_EXTENSIONS),
+        ]
     )
     event = models.ForeignKey(
         'Event',
