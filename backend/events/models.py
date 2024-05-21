@@ -17,7 +17,6 @@ from core.constants.events import (
     LEN_TYPE_EVENT_NAME,
     TYPE_AREA
 )
-from core.validators import validate_size_file
 from user.models import UserAccount
 
 
