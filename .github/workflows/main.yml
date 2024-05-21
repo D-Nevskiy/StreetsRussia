@@ -53,7 +53,6 @@ jobs:
   build_frontend_and_push_to_docker_hub:
     name: Push Docker image frontend to Docker Hub
     runs-on: ubuntu-latest
-    needs: build_backend_and_push_to_docker_hub
     steps:
       - name: Check out the repo DockerHub
         uses: actions/checkout@v3
@@ -72,7 +71,7 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          context: frontend/
+          context: ./frontend/
           push: true
           tags: dnevskiy/streets_frontend:latest
 
