@@ -25,6 +25,8 @@ services:
     command: celery -A streets_russia worker --loglevel=info
     depends_on:
       - redis
+    env_file:
+      - .env
 
   redis:
     image: redis:latest
@@ -41,13 +43,15 @@ services:
     container_name: street_russia-nginx
     depends_on:
       - web
+      - frontend
     restart: always
     build: ../nginx/
     volumes:
-      - static:/app/static/
+      - static:/var/html/static/
+      - static_front:/usr/share/nginx/html
     ports:
       - "8500:80"
-
 volumes:
   static:
+  static_front:
   db_data:
