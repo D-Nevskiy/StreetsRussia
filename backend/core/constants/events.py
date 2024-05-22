@@ -9,6 +9,7 @@ LEN_CITY_NAME: int = 20
 LEN_REGION_NAME: int = 50
 LEN_TYPE_AREA_NAME: int = 20
 LEN_ADDRESS: int = 150
+LEN_REGION_CODE: int = 10
 TYPE_AREA = [
     ('OPEN', 'Открытая'),
     ('CLOSED', 'Закрытая'),

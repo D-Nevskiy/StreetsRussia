@@ -29,3 +29,21 @@ class PhoneNumberValidator(validators.RegexValidator):
         'Пожалуйста, введите правильный номер телефона'
     )
     flags = 0
+
+
+class PassportSeriesValidator(validators.RegexValidator):
+    regex = r'^\d{4}$'
+    message = 'Серия паспорта должна содержать 4 цифры.'
+    flags = 0
+
+
+class PassportNumberValidator(validators.RegexValidator):
+    regex = r'^\d{6}$',
+    message = "Номер паспорта должен содержать 6 цифр."
+    flags = 0
+
+
+class FullNameValidator(validators.RegexValidator):
+    regex = r'^([А-Я]{1}[а-яё]{1,23}|[A-Z]{1}[a-z]{1,23})$'
+    message = "Ошибка при вводе имени."
+    flags = 0
