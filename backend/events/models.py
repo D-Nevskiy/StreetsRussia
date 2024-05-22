@@ -3,7 +3,9 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 
-from core.base_model import BaseModel
+from user.models import UserAccount
+from core.mixins import UUIDMixin, DateTimeMixin
+from core.validators import validate_size_file
 from core.constants.events import (
     ALLOWED_EXTENSIONS,
     LEN_ADDRESS,
@@ -15,13 +17,12 @@ from core.constants.events import (
     LEN_TITLE,
     LEN_TYPE_AREA_NAME,
     LEN_TYPE_EVENT_NAME,
-    TYPE_AREA
+    TYPE_AREA,
+    LEN_REGION_CODE
 )
-from core.validators import validate_size_file
-from user.models import UserAccount
 
 
-class GalleryEvent(BaseModel):
+class GalleryEvent(DateTimeMixin):
     """
     Модель, представляющая галерею для меропрития.
 
@@ -53,11 +54,12 @@ class GalleryEvent(BaseModel):
 
     class Meta:
         verbose_name = 'Галерея меропрития'
+        verbose_name_plural = 'Галерея меропритий'
 
 
-class Discipline(BaseModel):
+class Discipline(DateTimeMixin):
     """
-    Модель, представляющая дисциплину уличного спорта.
+    Модель, представляющая дисциплину уличной культуры.
 
     Атрибуты:
         - name (CharField): Название дисциплины.
@@ -75,19 +77,19 @@ class Discipline(BaseModel):
     )
 
     class Meta:
-        verbose_name = 'Дисциплина уличного спорта'
-        verbose_name_plural = 'Дисциплины уличного спорта'
+        verbose_name = 'Дисциплина уличной культуры'
+        verbose_name_plural = 'Дисциплины уличных культур'
 
     def __str__(self):
         return f'{self.name}'
 
 
-class SubDiscipline(BaseModel):
+class SubDiscipline(DateTimeMixin):
     """
     Модель, подкатегорию дисциплин.
 
     Атрибуты:
-        - name (CharField): Название региона.
+        - name (CharField): Название подкатегории.
         - discipline (ForeignKey): Дисциплины связанные с подкатегорией.
 
     Мета:
@@ -116,14 +118,14 @@ class SubDiscipline(BaseModel):
         return f'{self.discipline.name} - {self.name}'
 
 
-class Region(BaseModel):
+class Region(DateTimeMixin):
     """
     Модель, представляющая регион.
 
     Атрибуты:
         - name (CharField): Название региона.
-        - city (ForeignKey): Города связанные с регионом.
         - owner (FokeignKey): Региональный руководитель.
+        - code (CharField): Код региона.
 
     Мета:
         verbose_name (str): Название модели в единственном числе.
@@ -138,18 +140,16 @@ class Region(BaseModel):
         db_index=True,
         unique=True
     )
-    city = models.ForeignKey(
-        'City',
-        on_delete=models.CASCADE,
-        related_name='region_city',
-        verbose_name='Город проведения',
-        help_text='Выберите город'
-    )
     owner = models.ForeignKey(
         UserAccount,
         related_name='regions',
         on_delete=models.CASCADE,
         verbose_name='Региональный руководитель',
+    )
+    code = models.CharField(
+        'Код региона',
+        max_length=LEN_REGION_CODE,
+        unique=True
     )
 
     class Meta:
@@ -160,7 +160,7 @@ class Region(BaseModel):
         return f'{self.name}'
 
 
-class TypeEvent(BaseModel):
+class TypeEvent(DateTimeMixin):
     """
     Модель, представляющая тип мероприятия.
 
@@ -187,12 +187,13 @@ class TypeEvent(BaseModel):
         return f'{self.name}'
 
 
-class City(BaseModel):
+class City(DateTimeMixin):
     """
     Модель, представляющая город.
 
     Атрибуты:
         - name (CharField): Название города.
+        - region (ForeignKey): Название региона.
 
     Мета:
         verbose_name (str): Название модели в единственном числе.
@@ -207,6 +208,13 @@ class City(BaseModel):
         db_index=True,
         unique=True
     )
+    region = models.ForeignKey(
+        'Region',
+        on_delete=models.CASCADE,
+        related_name='region_city',
+        verbose_name='Регион',
+        help_text='Выберите регион'
+    )
 
     class Meta:
         verbose_name = 'Город'
@@ -216,7 +224,7 @@ class City(BaseModel):
         return f'{self.name}'
 
 
-class Location(BaseModel):
+class Location(DateTimeMixin):
     """
     Модель, представляющая локацию мероприятия.
 
@@ -278,7 +286,7 @@ class Location(BaseModel):
             )
 
 
-class Event(BaseModel):
+class Event(UUIDMixin, DateTimeMixin):
     """
     Модель, представляющая мероприятие.
 

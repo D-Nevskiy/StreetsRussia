@@ -1,11 +1,16 @@
-from uuid import uuid4
-
 from django.db import models
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 from user.tasks import send_email_task
+from core.mixins import UUIDMixin, DateTimeMixin
+from core.validators import (
+    PhoneNumberValidator,
+    PassportNumberValidator,
+    PassportSeriesValidator,
+    FullNameValidator
+)
 
 
 class UserAccountManager(BaseUserManager):
@@ -54,20 +59,20 @@ class UserAccountManager(BaseUserManager):
         self.send_temporary_password_email(user.email, temporary_password)
 
 
-class UserAccount(AbstractBaseUser):
+class UserAccount(AbstractBaseUser, UUIDMixin, DateTimeMixin):
 
     class Role(models.TextChoices):
         ADMIN = "ADMIN", "admin"
         USER = "USER", "user"
-        PARTICIPANT = "PARTICIPANT", "participant"
-        ORGANIZER = "ORGANIZER", "organizer"
-        SPONSOR = "SPONSOR", "sponsor"
+        REGIONAL_DIRECTOR = "REGIONAL_DIRECTOR", "regional_director"
 
     class Status(models.TextChoices):
         UNCONFIRMED = "UNCONFIRMED", "Unconfirmed"
         CONFIRMED = "CONFIRMED", "Confirmed"
 
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    class Gender(models.TextChoices):
+        MALE = "MALE", "male"
+        FEMALE = "FEMALE", "female"
 
     role = models.CharField(
         max_length=20,
@@ -81,16 +86,41 @@ class UserAccount(AbstractBaseUser):
         default=Status.UNCONFIRMED
     )
 
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=50, blank=True, null=True)
+    first_name = models.CharField(
+        max_length=50,
+        validators=[FullNameValidator,]
+    )
+    last_name = models.CharField(
+        max_length=50,
+        validators=[FullNameValidator,]
+    )
+    middle_name = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        validators=[FullNameValidator,]
+    )
+    gender = models.CharField(
+        max_length=6,
+        choices=Gender.choices,
+        default=Gender.MALE
+    )
     date_of_birth = models.DateField(null=True)
-    phone_number = models.CharField(max_length=12, unique=True)
+    phone_number = models.CharField(
+        max_length=12,
+        unique=True,
+        validators=[PhoneNumberValidator,]
+    )
     email = models.EmailField(unique=True)
     city = models.CharField(max_length=20)
-
-    passport_series = models.CharField(max_length=10)
-    passport_number = models.CharField(max_length=20)
+    passport_series = models.CharField(
+        max_length=10,
+        validators=[PassportSeriesValidator,]
+    )
+    passport_number = models.CharField(
+        max_length=20,
+        validators=[PassportNumberValidator,]
+    )
     passport_issue_date = models.DateField(null=True)
     passport_issued_by = models.CharField(max_length=100)
 
@@ -101,6 +131,10 @@ class UserAccount(AbstractBaseUser):
     REQUIRED_FIELDS = []
 
     objects = UserAccountManager()
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
     def __str__(self):
         return f'{self.email}'
