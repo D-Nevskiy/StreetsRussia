@@ -10,8 +10,6 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def send_email_task(subject, message, recipient_list, html_message):
-    logger.info(f':::::::::::::::::::{settings.EMAIL_HOST}')
-    logger.info(f':::::::::::::::::::{settings.EMAIL_PORT}')
     try:
         send_mail(
             subject,
