@@ -1,9 +1,7 @@
 import re
 
-from django.core import validators
-from django.core.exceptions import ValidationError
-
 from core.constants.events import MAX_FILE_SIZE
+from django.core.exceptions import ValidationError
 
 
 def validate_size_file(value):

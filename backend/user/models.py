@@ -1,27 +1,15 @@
-from django.db import models
-from django.utils.html import strip_tags
-from django.template.loader import render_to_string
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
-from user.tasks import send_email_task
+from core.constants.user import (LEN_FIRST_NAME, LEN_GENDER, LEN_LAST_NAME,
+                                 LEN_MIDDLE_NAME, LEN_PASSPORT_ISSUED_BY,
+                                 LEN_PASSPORT_NUMBER, LEN_PASSPORT_SERIES,
+                                 LEN_PHONE_NUMBER, LEN_ROLE)
 from core.mixins import DateTimeMixin
-from core.constants.user import (
-    LEN_ROLE,
-    LEN_FIRST_NAME,
-    LEN_LAST_NAME,
-    LEN_MIDDLE_NAME,
-    LEN_PHONE_NUMBER,
-    LEN_GENDER,
-    LEN_PASSPORT_SERIES,
-    LEN_PASSPORT_NUMBER,
-    LEN_PASSPORT_ISSUED_BY
-)
-from core.validators import (
-    validate_phone_number,
-    validate_passport_number,
-    validate_passport_series,
-    validate_full_name
-)
+from core.validators import (validate_full_name, validate_passport_number,
+                             validate_passport_series, validate_phone_number)
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db import models
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from user.tasks import send_email_task
 
 
 class UserAccountManager(BaseUserManager):

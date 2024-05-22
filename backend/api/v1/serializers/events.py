@@ -1,16 +1,7 @@
-from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist
-
-from events.models import (
-    Event,
-    GalleryEvent,
-    Location,
-    Discipline,
-    SubDiscipline,
-    TypeEvent,
-    City,
-    Region
-)
+from events.models import (City, Discipline, Event, GalleryEvent, Location,
+                           Region, SubDiscipline, TypeEvent)
+from rest_framework import serializers
 
 
 class TypeEventSerializer(serializers.ModelSerializer):

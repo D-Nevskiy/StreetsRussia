@@ -1,24 +1,15 @@
+from core.constants.events import (ALLOWED_EXTENSIONS, LEN_ADDRESS,
+                                   LEN_CITY_NAME, LEN_DESCRIPTION,
+                                   LEN_DISCIPLINE_NAME, LEN_REGION_CODE,
+                                   LEN_REGION_NAME, LEN_SUBDISCTIPLINE_NAME,
+                                   LEN_TITLE, LEN_TYPE_AREA_NAME,
+                                   LEN_TYPE_EVENT_NAME, TYPE_AREA)
+from core.mixins import DateTimeMixin
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
-
 from user.models import UserAccount
-from core.mixins import DateTimeMixin
-from core.constants.events import (
-    ALLOWED_EXTENSIONS,
-    LEN_ADDRESS,
-    LEN_CITY_NAME,
-    LEN_DESCRIPTION,
-    LEN_DISCIPLINE_NAME,
-    LEN_REGION_NAME,
-    LEN_SUBDISCTIPLINE_NAME,
-    LEN_TITLE,
-    LEN_TYPE_AREA_NAME,
-    LEN_TYPE_EVENT_NAME,
-    TYPE_AREA,
-    LEN_REGION_CODE
-)
 
 
 class GalleryEvent(DateTimeMixin):

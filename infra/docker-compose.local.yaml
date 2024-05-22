@@ -31,26 +31,27 @@ services:
   redis:
     image: redis:latest
 
-  frontend:
-    container_name: street_russia-frontend
-    depends_on:
-      - web
-    build: ../frontend/
-    volumes:
-      - static_front:/app/dist/
+  # frontend:
+  #   container_name: street_russia-frontend
+  #   depends_on:
+  #     - web
+  #   build: ../frontend/
+  #   volumes:
+  #     - static_front:/app/dist/
 
   nginx:
     container_name: street_russia-nginx
     depends_on:
       - web
-      - frontend
+      # - frontend
     restart: always
     build: ../nginx/
     volumes:
       - static:/var/html/static/
-      - static_front:/usr/share/nginx/html
+      # - static_front:/usr/share/nginx/html
     ports:
       - "8500:80"
+
 volumes:
   static:
   static_front:

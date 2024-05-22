@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from news.models import Category, GalleryNews, News
 
 
