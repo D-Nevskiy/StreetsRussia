@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'events.apps.EventsConfig',
     'news.apps.NewsConfig',
     'user.apps.UserConfig',
+    'partners.apps.PartnersConfig',
 ]
 
 MIDDLEWARE = [
@@ -113,7 +114,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+DEFAULT_API_URL = os.getenv('DEFAULT_API_URL', 'http://localhost:8500')
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {
@@ -123,7 +124,7 @@ SWAGGER_SETTINGS = {
             'in': 'header'
         }
     },
-    'DEFAULT_API_URL': 'https://streetsrussia.sytes.net',
+    'DEFAULT_API_URL': DEFAULT_API_URL,
 }
 
 AUTH_USER_MODEL = 'user.UserAccount'
@@ -132,10 +133,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 CORS_ALLOWED_ORIGINS = [
-    'https://streetsrussia.sytes.net',
+    DEFAULT_API_URL,
 ]
 
 # SMTP YANDEX
@@ -157,7 +161,7 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 
 # S3
-USE_S3 = os.getenv('USE_S3', 'False')
+USE_S3 = os.getenv('USE_S3', False)
 
 if USE_S3:
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', 'test')

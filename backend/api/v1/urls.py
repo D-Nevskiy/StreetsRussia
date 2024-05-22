@@ -5,11 +5,13 @@ from api.v1.views.events import EventViewSet
 from api.v1.views.news import CategoryViewSet, NewsViewSet
 from api.v1.views.user import (ChangePasswordView, LoginView, LogoutView,
                                SignupView, UserApprovalView, UserProfileView)
+from api.v1.views.partners import PartherViewSet
 
 router = SimpleRouter()
 router.register('events', EventViewSet, basename='events')
 router.register('news', NewsViewSet, basename='news')
 router.register('category', CategoryViewSet, basename='category')
+router.register('partners', PartherViewSet, basename='parthers')
 
 
 urlpatterns = [
