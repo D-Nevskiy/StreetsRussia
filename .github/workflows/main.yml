@@ -138,6 +138,6 @@ jobs:
             echo USE_S3=${{ secrets.USE_S3 }} >> .env
             echo DEFAULT_API_URL=${{ secrets.DEFAULT_API_URL }} >> .env
             sudo docker-compose up -d
-            sudo docker compose exec web python manage.py makemigrations events news user
+            sudo docker compose exec web python manage.py makemigrations events news user partners
             sudo docker compose exec web python manage.py migrate
             sudo docker compose exec web python manage.py collectstatic --noinput
