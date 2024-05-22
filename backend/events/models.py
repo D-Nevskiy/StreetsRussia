@@ -5,7 +5,6 @@ from django.utils import timezone
 
 from user.models import UserAccount
 from core.mixins import DateTimeMixin
-from core.validators import validate_size_file
 from core.constants.events import (
     ALLOWED_EXTENSIONS,
     LEN_ADDRESS,

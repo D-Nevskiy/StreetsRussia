@@ -17,10 +17,10 @@ from core.constants.user import (
     LEN_PASSPORT_ISSUED_BY
 )
 from core.validators import (
-    PhoneNumberValidator,
-    PassportNumberValidator,
-    PassportSeriesValidator,
-    FullNameValidator
+    validate_phone_number,
+    validate_passport_number,
+    validate_passport_series,
+    validate_full_name
 )
 
 
@@ -151,17 +151,17 @@ class UserAccount(AbstractBaseUser, DateTimeMixin):
 
     first_name = models.CharField(
         max_length=LEN_FIRST_NAME,
-        validators=[FullNameValidator,],
+        validators=[validate_full_name],
         verbose_name='Имя'
     )
     last_name = models.CharField(
         max_length=LEN_LAST_NAME,
-        validators=[FullNameValidator,],
+        validators=[validate_full_name],
         verbose_name='Фамилия'
     )
     middle_name = models.CharField(
         max_length=LEN_MIDDLE_NAME,
-        validators=[FullNameValidator,],
+        validators=[validate_full_name],
         verbose_name='Отчество'
     )
     gender = models.CharField(
@@ -173,19 +173,19 @@ class UserAccount(AbstractBaseUser, DateTimeMixin):
     phone_number = models.CharField(
         max_length=LEN_PHONE_NUMBER,
         unique=True,
-        validators=[PhoneNumberValidator,],
+        validators=[validate_phone_number],
         verbose_name='Телефон'
     )
     email = models.EmailField(unique=True, verbose_name='Электронная почта')
     city = models.CharField(max_length=20, verbose_name='Город')
     passport_series = models.CharField(
         max_length=LEN_PASSPORT_SERIES,
-        validators=[PassportSeriesValidator,],
+        validators=[validate_passport_series],
         verbose_name='Серия паспорта'
     )
     passport_number = models.CharField(
         max_length=LEN_PASSPORT_NUMBER,
-        validators=[PassportNumberValidator,],
+        validators=[validate_passport_number],
         verbose_name='Номер паспорта'
     )
     passport_issue_date = models.DateField(
