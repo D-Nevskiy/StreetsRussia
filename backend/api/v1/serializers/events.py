@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.core.exceptions import ObjectDoesNotExist
 
 from events.models import (
     Event,
@@ -47,7 +48,6 @@ class SubDisciplineSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
-            'discipline',
         )
 
 
@@ -90,10 +90,55 @@ class EventSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
 
     def create(self, validated_data):
+        discipline_data = validated_data.pop('discipline')
+        sub_discipline_data = validated_data.pop('sub_discipline')
+        type_of_event_data = validated_data.pop('type_of_event')
+        location_data = validated_data.pop('location')
+
+        try:
+            discipline = Discipline.objects.get(**discipline_data)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError(
+                "Такой дисциплины не существует"
+            )
+
+        try:
+            sub_discipline = SubDiscipline.objects.get(
+                discipline=discipline,
+                **sub_discipline_data
+            )
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError(
+                "Такой поддисциплины не существует"
+            )
+
+        try:
+            type_of_event = TypeEvent.objects.get(**type_of_event_data)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError(
+                "Такого типа мероприятия не существует"
+            )
+
+        try:
+            location = Location.objects.get(**location_data)
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError(
+                "Такой локации не существует"
+            )
+
+        event = Event.objects.create(
+            discipline=discipline,
+            sub_discipline=sub_discipline,
+            type_of_event=type_of_event,
+            location=location,
+            **validated_data
+        )
+
         files_data = self.context.get('request').FILES.getlist('images')
-        event = Event.objects.create(**validated_data)
         for file in files_data:
             GalleryEvent.objects.create(event=event, file=file)
+
+        return event
 
     class Meta:
         model = Event
@@ -108,6 +153,7 @@ class EventSerializer(serializers.ModelSerializer):
             'type_of_event',
             'location',
             'organizers_contact',
+            'author'
         )
 
 

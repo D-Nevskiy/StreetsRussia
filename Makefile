@@ -5,7 +5,7 @@ stop_dev:
 	docker compose -f infra/docker-compose.local.yaml down -v 
 
 conf_backend:
-	docker exec street_russia-backend python manage.py makemigrations news events user && \
+	docker exec street_russia-backend python manage.py makemigrations news events user partners && \
 	docker exec street_russia-backend python manage.py migrate && \
 	docker exec street_russia-backend python manage.py collectstatic --noinput
 

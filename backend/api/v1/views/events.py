@@ -9,6 +9,7 @@ from events.models import (
     Region,
     City
 )
+from api.v1.permissions import IsAdminOrReadOnly
 from api.v1.serializers.events import (
     EventSerializer,
     EventSmallReadSerializer,
@@ -22,6 +23,7 @@ from api.v1.serializers.events import (
 
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
+    permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('discipline', 'start_datetime')
 
@@ -40,6 +42,7 @@ class DisciplineViewSet(mixins.ListModelMixin,
                         mixins.RetrieveModelMixin,
                         viewsets.GenericViewSet):
     queryset = Discipline.objects.all()
+    permission_classes = (IsAdminOrReadOnly,)
     serializer_class = DisciplineSerializer
     filter_backends = (DjangoFilterBackend,)
 
@@ -48,6 +51,7 @@ class SubDisciplineViewSet(mixins.ListModelMixin,
                            mixins.RetrieveModelMixin,
                            viewsets.GenericViewSet):
     queryset = SubDiscipline.objects.all()
+    permission_classes = (IsAdminOrReadOnly,)
     serializer_class = SubDisciplineSerializer
     filter_backends = (DjangoFilterBackend,)
 
@@ -56,6 +60,7 @@ class TypeEventViewSet(mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
                        viewsets.GenericViewSet):
     queryset = TypeEvent.objects.all()
+    permission_classes = (IsAdminOrReadOnly,)
     serializer_class = TypeEventSerializer
     filter_backends = (DjangoFilterBackend,)
 
@@ -64,6 +69,7 @@ class CityViewSet(mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
                   viewsets.GenericViewSet):
     queryset = City.objects.all()
+    permission_classes = (IsAdminOrReadOnly,)
     serializer_class = CitySerializer
     filter_backends = (DjangoFilterBackend,)
 
@@ -72,5 +78,6 @@ class RegionViewSet(mixins.ListModelMixin,
                     mixins.RetrieveModelMixin,
                     viewsets.GenericViewSet):
     queryset = Region.objects.all()
+    permission_classes = (IsAdminOrReadOnly,)
     serializer_class = RegionSerializer
     filter_backends = (DjangoFilterBackend,)

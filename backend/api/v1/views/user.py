@@ -4,6 +4,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 
 from user.models import UserAccount
+from api.v1.permissions import IsAdminOrCreateOnly
 from api.v1.serializers.user import (
     ChangePasswordSerializer,
     UserAccountSerializer,
@@ -14,13 +15,14 @@ from api.v1.serializers.user import (
 class SignupView(generics.CreateAPIView):
     queryset = UserAccount.objects.all()
     serializer_class = UserAccountSerializer
+    permission_classes = (IsAdminOrCreateOnly,)
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(
-                {'message': 'Когда ваши данные будут проверены. '
+                {'message': 'Когда ваши данные будут проверены.'
                             'Вы получите электронное письмо с вашим паролем.'},
                 status=status.HTTP_201_CREATED
             )
@@ -28,6 +30,7 @@ class SignupView(generics.CreateAPIView):
 
 
 class LoginView(ObtainAuthToken):
+    permission_classes = (IsAdminOrCreateOnly,)
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
