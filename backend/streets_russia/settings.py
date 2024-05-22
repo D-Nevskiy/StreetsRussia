@@ -114,7 +114,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-DEFAULT_API_URL = os.getenv('DEFAULT_API_URL', 'http://localhost:8500')
+DEFAULT_API_URL = os.getenv('DEFAULT_API_URL', 'http://127.0.0.1:8500')
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {

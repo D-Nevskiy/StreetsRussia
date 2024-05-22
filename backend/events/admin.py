@@ -1,15 +1,7 @@
 from django.contrib import admin
 
-from .models import (
-    City,
-    Discipline,
-    Event,
-    GalleryEvent,
-    SubDiscipline,
-    Region,
-    TypeEvent,
-    Location
-)
+from .models import (City, Discipline, Event, GalleryEvent, Location, Region,
+                     SubDiscipline, TypeEvent)
 
 
 class GalleryEventInline(admin.TabularInline):

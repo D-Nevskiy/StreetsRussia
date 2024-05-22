@@ -1,9 +1,7 @@
+from core.constants.partners import (ALLOWED_EXTENSIONS_PART,
+                                     LEN_DESCRIPTION_PART, LEN_NAME_PARTNER)
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from core.constants.partners import (LEN_NAME_PARTNER,
-                                     ALLOWED_EXTENSIONS_PART,
-                                     LEN_DESCRIPTION_PART,
-                                     )
 
 
 class Partner(models.Model):
