@@ -2,11 +2,13 @@ from rest_framework import generics, permissions, status, views
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
-from user.models import UserAccount
 
-from api.v1.serializers.user import (ChangePasswordSerializer,
-                                     UserAccountSerializer,
-                                     UserApprovalSerializer)
+from user.models import UserAccount
+from api.v1.serializers.user import (
+    ChangePasswordSerializer,
+    UserAccountSerializer,
+    UserApprovalSerializer
+)
 
 
 class SignupView(generics.CreateAPIView):
