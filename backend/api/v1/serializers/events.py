@@ -1,7 +1,15 @@
 from rest_framework import serializers
 
-from events.models import (Event, GalleryEvent, Location, Discipline,
-                           SubDiscipline, TypeEvent)
+from events.models import (
+    Event,
+    GalleryEvent,
+    Location,
+    Discipline,
+    SubDiscipline,
+    TypeEvent,
+    City,
+    Region
+)
 
 
 class TypeEventSerializer(serializers.ModelSerializer):
@@ -28,6 +36,7 @@ class DisciplineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Discipline
         fields = (
+            'id',
             'name',
         )
 
@@ -36,7 +45,30 @@ class SubDisciplineSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubDiscipline
         fields = (
+            'id',
             'name',
+            'discipline',
+        )
+
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = (
+            'id',
+            'name',
+            'region',
+        )
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = (
+            'id',
+            'name',
+            'owner',
+            'code',
         )
 
 
