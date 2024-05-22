@@ -1,8 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from news.models import Category, News
 from rest_framework import viewsets
 
 from api.v1.serializers.news import CategorySerializer, NewsSerializer
+from news.models import Category, News
 
 
 class NewsViewSet(viewsets.ModelViewSet):

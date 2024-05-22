@@ -3,9 +3,9 @@ from rest_framework.routers import SimpleRouter
 
 from api.v1.views.events import EventViewSet
 from api.v1.views.news import CategoryViewSet, NewsViewSet
+from api.v1.views.partners import PartherViewSet
 from api.v1.views.user import (ChangePasswordView, LoginView, LogoutView,
                                SignupView, UserApprovalView, UserProfileView)
-from api.v1.views.partners import PartherViewSet
 
 router = SimpleRouter()
 router.register('events', EventViewSet, basename='events')
