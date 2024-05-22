@@ -1,8 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from events.models import Event
 from rest_framework import viewsets
 
 from api.v1.serializers.events import EventSerializer, EventSmallReadSerializer
+from events.models import Event
 
 
 class EventViewSet(viewsets.ModelViewSet):

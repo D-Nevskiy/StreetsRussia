@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from events.models import (Event, GalleryEvent, Location, Discipline,
+from events.models import (Discipline, Event, GalleryEvent, Location,
                            SubDiscipline, TypeEvent)
 
 

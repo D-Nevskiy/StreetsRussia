@@ -1,5 +1,6 @@
-from news.models import Category, GalleryNews, News
 from rest_framework import serializers
+
+from news.models import Category, GalleryNews, News
 
 
 class GalleryNewsSerializer(serializers.ModelSerializer):
