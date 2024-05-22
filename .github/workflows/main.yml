@@ -91,7 +91,7 @@ jobs:
             sudo docker compose down
             rm .env
             touch .env
-            echo DB_ENGINE=${{ secrets.DEBUG }} >> .env
+            echo DEBUG=${{ secrets.DEBUG }} >> .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
@@ -106,6 +106,10 @@ jobs:
             echo EMAIL_USE_SSL=${{ secrets.EMAIL_USE_SSL }} >> .env
             echo USE_S3=${{ secrets.USE_S3 }} >> .env
             echo DEFAULT_API_URL=${{ secrets.DEFAULT_API_URL }} >> .env
+            echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
+            echo AWS_STORAGE_BUCKET_NAME=${{ secrets.AWS_STORAGE_BUCKET_NAME }} >> .env
+            echo AWS_S3_ENDPOINT_URL=${{ secrets.AWS_S3_ENDPOINT_URL }} >> .env
+            echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env
             sudo docker-compose up -d
             sudo docker compose exec web python manage.py makemigrations events news user partners
             sudo docker compose exec web python manage.py migrate
