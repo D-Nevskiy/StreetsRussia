@@ -1,15 +1,19 @@
 from datetime import datetime
 
-from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.core.validators import FileExtensionValidator
 
-from core.constants.news import (ALLOWED_EXTENSIONS, LEN_CATEGORY_NAME,
-                                 LEN_TITLE)
+from core.constants.news import (
+    ALLOWED_EXTENSIONS,
+    LEN_CATEGORY_NAME,
+    LEN_TITLE
+)
 from core.validators import validate_size_file
+from core.mixins import DateTimeMixin
 from events.models import City
 
 
-class News(models.Model):
+class News(DateTimeMixin):
     """
     Модель для хранения информации о новостном материале.
 
@@ -50,7 +54,7 @@ class News(models.Model):
         return self.title
 
 
-class Category(models.Model):
+class Category(DateTimeMixin):
     """
     Модель для хранения категорий.
 
@@ -71,7 +75,7 @@ class Category(models.Model):
         return self.name
 
 
-class GalleryNews(models.Model):
+class GalleryNews(DateTimeMixin):
     """
     Модель, представляющая галерею для новостей.
 

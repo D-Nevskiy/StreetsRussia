@@ -4,7 +4,7 @@ from django.db import models
 from django.utils import timezone
 
 from user.models import UserAccount
-from core.mixins import UUIDMixin, DateTimeMixin
+from core.mixins import DateTimeMixin
 from core.validators import validate_size_file
 from core.constants.events import (
     ALLOWED_EXTENSIONS,
@@ -286,7 +286,7 @@ class Location(DateTimeMixin):
             )
 
 
-class Event(UUIDMixin, DateTimeMixin):
+class Event(DateTimeMixin):
     """
     Модель, представляющая мероприятие.
 

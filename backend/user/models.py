@@ -4,7 +4,18 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 from user.tasks import send_email_task
-from core.mixins import UUIDMixin, DateTimeMixin
+from core.mixins import DateTimeMixin
+from core.constants.user import (
+    LEN_ROLE,
+    LEN_FIRST_NAME,
+    LEN_LAST_NAME,
+    LEN_MIDDLE_NAME,
+    LEN_PHONE_NUMBER,
+    LEN_GENDER,
+    LEN_PASSPORT_SERIES,
+    LEN_PASSPORT_NUMBER,
+    LEN_PASSPORT_ISSUED_BY
+)
 from core.validators import (
     PhoneNumberValidator,
     PassportNumberValidator,
@@ -14,7 +25,30 @@ from core.validators import (
 
 
 class UserAccountManager(BaseUserManager):
+    """
+    Кастомный менеджер для модели UserAccount,
+    чтобы обрабатывать создание и подтверждение пользователей.
 
+    Методы:
+    create_superuser(email, password)
+        Создает и возвращает суперпользователя с указанными email и паролем.
+
+    create_user(email, password=None, **extra_fields)
+        Создает и возвращает пользователя с указанными email и паролем.
+        Дополнительные поля могут быть предоставлены через extra_fields.
+
+    generate_temporary_password()
+        Генерирует и возвращает случайный временный пароль для пользователя.
+
+    send_temporary_password_email(email, temporary_password)
+        Отправляет электронное письмо пользователю с предоставленным
+        временным паролем.
+
+    approve_user(user)
+        Одобряет указанного пользователя, устанавливая временный пароль,
+        обновляя статус пользователя на подтвержденный и отправляя
+        электронное письмо с временным паролем.
+    """
     def create_superuser(self, email, password):
         user = self.create_user(
             email=email,
@@ -59,8 +93,35 @@ class UserAccountManager(BaseUserManager):
         self.send_temporary_password_email(user.email, temporary_password)
 
 
-class UserAccount(AbstractBaseUser, UUIDMixin, DateTimeMixin):
+class UserAccount(AbstractBaseUser, DateTimeMixin):
+    """
+    Модель учетной записи пользователя.
 
+    Атрибуты:
+        role (CharField): Роль пользователя.
+        status (CharField): Статус пользователя.
+        first_name (CharField): Имя пользователя.
+        last_name (CharField): Фамилия пользователя.
+        middle_name (CharField): Отчество пользователя.
+        gender (CharField): Пол пользователя.
+        date_of_birth (Datetime): Дата рождения пользователя.
+        phone_number (CharField): Номер телефона пользователя.
+        email (EmailField): Электронная почта пользователя.
+        city (CharField): Город пользователя.
+        passport_series (CharField): Серия паспорта пользователя.
+        passport_number (CharField): Номер паспорта пользователя.
+        passport_issue_date (DateField): Дата выдачи паспорта.
+        passport_issued_by (CharField): Орган, выдавший паспорт.
+        consent_to_rights (CharField): Согласие пользователя на
+        права, по умолчанию False.
+        сonsent_to_processing (CharField): Согласие пользователя
+        на обработку данных.
+        USERNAME_FIELD (str): Поле, используемое для уникальной
+        идентификации пользователя.
+        REQUIRED_FIELDS (list): Дополнительные поля, обязательные
+        при создании суперпользователя.
+        objects (UserAccountManager): Менеджер модели UserAccount.
+    """
     class Role(models.TextChoices):
         ADMIN = "ADMIN", "admin"
         USER = "USER", "user"
@@ -77,55 +138,73 @@ class UserAccount(AbstractBaseUser, UUIDMixin, DateTimeMixin):
     role = models.CharField(
         max_length=20,
         choices=Role.choices,
-        default=Role.USER
+        default=Role.USER,
+        verbose_name='Роль'
     )
 
     status = models.CharField(
-        max_length=20,
+        max_length=LEN_ROLE,
         choices=Status.choices,
-        default=Status.UNCONFIRMED
+        default=Status.UNCONFIRMED,
+        verbose_name='Статус'
     )
 
     first_name = models.CharField(
-        max_length=50,
-        validators=[FullNameValidator,]
+        max_length=LEN_FIRST_NAME,
+        validators=[FullNameValidator,],
+        verbose_name='Имя'
     )
     last_name = models.CharField(
-        max_length=50,
-        validators=[FullNameValidator,]
+        max_length=LEN_LAST_NAME,
+        validators=[FullNameValidator,],
+        verbose_name='Фамилия'
     )
     middle_name = models.CharField(
-        max_length=50,
-        blank=True,
-        null=True,
-        validators=[FullNameValidator,]
+        max_length=LEN_MIDDLE_NAME,
+        validators=[FullNameValidator,],
+        verbose_name='Отчество'
     )
     gender = models.CharField(
-        max_length=6,
+        max_length=LEN_GENDER,
         choices=Gender.choices,
-        default=Gender.MALE
+        verbose_name='Пол'
     )
-    date_of_birth = models.DateField(null=True)
+    date_of_birth = models.DateField(null=True, verbose_name='Дата рождения')
     phone_number = models.CharField(
-        max_length=12,
+        max_length=LEN_PHONE_NUMBER,
         unique=True,
-        validators=[PhoneNumberValidator,]
+        validators=[PhoneNumberValidator,],
+        verbose_name='Телефон'
     )
-    email = models.EmailField(unique=True)
-    city = models.CharField(max_length=20)
+    email = models.EmailField(unique=True, verbose_name='Электронная почта')
+    city = models.CharField(max_length=20, verbose_name='Город')
     passport_series = models.CharField(
-        max_length=10,
-        validators=[PassportSeriesValidator,]
+        max_length=LEN_PASSPORT_SERIES,
+        validators=[PassportSeriesValidator,],
+        verbose_name='Серия паспорта'
     )
     passport_number = models.CharField(
-        max_length=20,
-        validators=[PassportNumberValidator,]
+        max_length=LEN_PASSPORT_NUMBER,
+        validators=[PassportNumberValidator,],
+        verbose_name='Номер паспорта'
     )
-    passport_issue_date = models.DateField(null=True)
-    passport_issued_by = models.CharField(max_length=100)
+    passport_issue_date = models.DateField(
+        null=True,
+        verbose_name='Дата выдачи паспорта'
+    )
+    passport_issued_by = models.CharField(
+        max_length=LEN_PASSPORT_ISSUED_BY,
+        verbose_name='Кем выдан паспорт'
+    )
 
-    consent_to_rights = models.BooleanField(default=False)
-    сonsent_to_processing = models.BooleanField(default=False)
+    consent_to_rights = models.BooleanField(
+        default=False,
+        verbose_name='Согласие с правилами'
+    )
+    сonsent_to_processing = models.BooleanField(
+        default=False,
+        verbose_name='Согласие на обработку данных'
+    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
