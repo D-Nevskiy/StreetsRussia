@@ -26,6 +26,8 @@ services:
     command: celery -A streets_russia worker --loglevel=info
     depends_on:
       - redis
+    env_file:
+      - .env
 
   redis:
     image: redis:latest

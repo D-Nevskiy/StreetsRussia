@@ -10,6 +10,7 @@ from api.v1.views.events import (
     RegionViewSet
 )
 from api.v1.views.news import CategoryViewSet, NewsViewSet
+from api.v1.views.partners import PartherViewSet
 from api.v1.views.user import (
     ChangePasswordView,
     LoginView,
@@ -30,6 +31,7 @@ router.register(
 )
 router.register('type-event', TypeEventViewSet, basename='type-event')
 router.register('category', CategoryViewSet, basename='category')
+router.register('partners', PartherViewSet, basename='parthers')
 router.register('city', CityViewSet, basename='city')
 router.register('region', RegionViewSet, basename='region')
 
