@@ -141,6 +141,7 @@ class EventSerializer(serializers.ModelSerializer):
             'type_of_event',
             'location',
             'organizers_contact',
+            'author',
         )
 
 
