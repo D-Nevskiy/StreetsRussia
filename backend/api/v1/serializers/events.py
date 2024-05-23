@@ -1,4 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist
 from events.models import (City, Discipline, Event, GalleryEvent, Location,
                            Region, SubDiscipline, TypeEvent)
 from api.v1.serializers.user import UserSmallSerializer
