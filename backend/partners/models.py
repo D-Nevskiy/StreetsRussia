@@ -1,5 +1,6 @@
 from core.constants.partners import (ALLOWED_EXTENSIONS_PART,
-                                     LEN_DESCRIPTION_PART, LEN_NAME_PARTNER)
+                                     LEN_DESCRIPTION_PART, LEN_NAME_PARTNER,
+                                     LEN_TYPE_PARTNER, TYPE_PARTNER)
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
@@ -12,6 +13,7 @@ class Partner(models.Model):
         name (CharField): Название партнёра.
         image (ImageField): Изображение партнёра.
         description (TextField): Описание партёра.
+        type (CharField): Тип партнёра.
 
     Мета:
         verbose_name (str): Название модели в единственном числе.
@@ -35,6 +37,11 @@ class Partner(models.Model):
     description = models.TextField(
         'Описание партёра',
         max_length=LEN_DESCRIPTION_PART,
+    )
+    type = models.CharField(
+        'Тип партнёра',
+        max_length=LEN_TYPE_PARTNER,
+        choices=TYPE_PARTNER
     )
 
     class Meta:
