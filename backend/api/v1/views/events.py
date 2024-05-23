@@ -27,6 +27,9 @@ class EventViewSet(viewsets.ModelViewSet):
             return EventSerializer
         return EventSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
 
 class DisciplineViewSet(mixins.ListModelMixin,
                         mixins.RetrieveModelMixin,

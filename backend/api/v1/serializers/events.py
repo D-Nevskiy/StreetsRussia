@@ -1,6 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from events.models import (City, Discipline, Event, GalleryEvent, Location,
                            Region, SubDiscipline, TypeEvent)
+from api.v1.serializers.user import UserAccountSerializer
 from rest_framework import serializers
 
 
@@ -79,6 +80,7 @@ class EventSerializer(serializers.ModelSerializer):
     sub_discipline = SubDisciplineSerializer()
     type_of_event = TypeEventSerializer()
     location = LocationSerializer()
+    author = UserAccountSerializer(read_only=True)
 
     def create(self, validated_data):
         discipline_data = validated_data.pop('discipline')
@@ -139,7 +141,6 @@ class EventSerializer(serializers.ModelSerializer):
             'type_of_event',
             'location',
             'organizers_contact',
-            'author'
         )
 
 
