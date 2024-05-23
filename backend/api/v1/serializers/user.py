@@ -50,3 +50,15 @@ class UserApprovalSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
         fields = ['id', 'status']
+
+
+class UserSmallSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'middle_name',
+            'phone_number'
+        )

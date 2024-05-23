@@ -1,8 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from events.models import (City, Discipline, Event, GalleryEvent, Location,
                            Region, SubDiscipline, TypeEvent)
-from api.v1.serializers.user import UserAccountSerializer
+from api.v1.serializers.user import UserSmallSerializer
 from rest_framework import serializers
+from django.shortcuts import get_object_or_404
 
 
 class TypeEventSerializer(serializers.ModelSerializer):
@@ -80,7 +81,7 @@ class EventSerializer(serializers.ModelSerializer):
     sub_discipline = SubDisciplineSerializer()
     type_of_event = TypeEventSerializer()
     location = LocationSerializer()
-    author = UserAccountSerializer(read_only=True)
+    author = UserSmallSerializer(read_only=True)
 
     def create(self, validated_data):
         discipline_data = validated_data.pop('discipline')
@@ -88,31 +89,23 @@ class EventSerializer(serializers.ModelSerializer):
         type_of_event_data = validated_data.pop('type_of_event')
         location_data = validated_data.pop('location')
 
-        try:
-            discipline = Discipline.objects.get(**discipline_data)
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(
-                "Такой дисциплины не существует"
-            )
+        discipline = get_object_or_404(
+            Discipline,
+            **discipline_data
+        )
+        sub_discipline = get_object_or_404(
+            SubDiscipline,
+            discipline=discipline,
+            **sub_discipline_data
+        )
+        type_of_event = get_object_or_404(
+            TypeEvent,
+            **type_of_event_data
+        )
 
-        try:
-            sub_discipline = SubDiscipline.objects.get(
-                discipline=discipline,
-                **sub_discipline_data
-            )
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(
-                "Такой поддисциплины не существует"
-            )
-
-        try:
-            type_of_event = TypeEvent.objects.get(**type_of_event_data)
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(
-                "Такого типа мероприятия не существует"
-            )
-
-        location, created = Location.objects.get_or_create(**location_data)
+        location, created = Location.objects.get_or_create(
+            **location_data
+        )
 
         event = Event.objects.create(
             discipline=discipline,
@@ -146,19 +139,13 @@ class EventSerializer(serializers.ModelSerializer):
 
 
 class EventSmallReadSerializer(EventSerializer):
-    files = GalleryEventSerializer(
-        many=True,
-        read_only=True,
-        source='gallery_events'
-    )
-
     class Meta:
         model = Event
         fields = (
             'title',
-            'discipline',
             'start_datetime',
-            'end_datetime',
             'location',
             'files',
+            'author',
+            'organizers_contact',
         )
