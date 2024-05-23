@@ -19,6 +19,10 @@ services:
       - static:/app/static/
     env_file:
       - .env
+    command: sh -c "python manage.py collectstatic --noinput && 
+      python manage.py makemigrations && 
+      python manage.py migrate && 
+      gunicorn streets_russia.wsgi:application --bind 0:8000"
 
   celery:
     build: ../backend/

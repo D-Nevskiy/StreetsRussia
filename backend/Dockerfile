@@ -9,5 +9,3 @@ RUN pip3 install -r /app/requirements.txt
 COPY . /app
 
 WORKDIR /app
-
-CMD ["gunicorn", "streets_russia.wsgi:application", "--bind", "0:8000" ]
