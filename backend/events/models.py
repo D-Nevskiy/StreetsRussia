@@ -233,7 +233,6 @@ class Location(DateTimeMixin):
         'Название площадки',
         max_length=LEN_TITLE,
         help_text='Введите название площадки',
-        unique=True
     )
     region = models.ForeignKey(
         Region,

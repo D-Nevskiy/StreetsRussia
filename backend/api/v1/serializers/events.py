@@ -110,12 +110,7 @@ class EventSerializer(serializers.ModelSerializer):
                 "Такого типа мероприятия не существует"
             )
 
-        try:
-            location = Location.objects.get(**location_data)
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(
-                "Такой локации не существует"
-            )
+        location, created = Location.objects.get_or_create(**location_data)
 
         event = Event.objects.create(
             discipline=discipline,
