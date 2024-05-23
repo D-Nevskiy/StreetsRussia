@@ -5,4 +5,4 @@ from rest_framework import serializers
 class PartnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partner
-        fields = ('id', 'name', 'image', 'description')
+        fields = ('id', 'name', 'image', 'description', 'type')
