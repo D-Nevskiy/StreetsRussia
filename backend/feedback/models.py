@@ -8,7 +8,21 @@ from core.constants.user import LEN_PHONE_NUMBER
 
 class Feedback(DateTimeMixin):
     """
+    Модель, представляющая обратную связь.
 
+    Атрибуты:
+        - user (ForeignKey): Пользователь отправивший запрос.
+        - content (TextField): Содержимое письма
+        - phone_number (BooleanField): Соглашение о правилах
+        - consent_to_rights (BoolField): Номер телефона пользователя
+        - сonsent_to_processing (BoolField): Номер телефона пользователя
+
+    Мета:
+        verbose_name (str): Название модели в единственном числе.
+        verbose_name_plural (str): Название модели во множественном числе.
+
+    Методы:
+        __str__(): Возвращает строковое представление обратной связи.
     """
     user = models.ForeignKey(
         UserAccount,
@@ -16,11 +30,6 @@ class Feedback(DateTimeMixin):
         on_delete=models.CASCADE,
         null=True,
         blank=True
-    )
-    ip_address = models.GenericIPAddressField(
-        'IP отправителя',
-        blank=True,
-        null=True
     )
     content = models.TextField(
         'Содержимое письма'
@@ -31,7 +40,9 @@ class Feedback(DateTimeMixin):
     phone_number = models.CharField(
         'Номер телефона отправителя',
         max_length=LEN_PHONE_NUMBER,
-        validators=[validate_phone_number]
+        validators=[validate_phone_number],
+        null=True,
+        blank=True
     )
     consent_to_rights = models.BooleanField(
         verbose_name='Согласие с правилами'

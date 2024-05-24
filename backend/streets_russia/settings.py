@@ -137,6 +137,16 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '10000/day',  # Лимит для UserRateThrottle
+        'anon': '1000/day',  # Лимит для AnonRateThrottle
+        'feedback_request': '10/hour' # Лимит на POST запрос в feedback
+    }
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
