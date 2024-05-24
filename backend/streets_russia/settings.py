@@ -139,9 +139,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-CORS_ALLOWED_ORIGINS = [
-    DEFAULT_API_URL,
-]
+CORS_ALLOW_ALL_ORIGINS = True
+
+# CORS_ALLOWED_ORIGINS = [
+#     DEFAULT_API_URL,
+# ]
 
 # SMTP YANDEX
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
