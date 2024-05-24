@@ -5,6 +5,7 @@ from api.v1.views.news import CategoryViewSet, NewsViewSet
 from api.v1.views.partners import PartherViewSet
 from api.v1.views.user import (ChangePasswordView, LoginView, LogoutView,
                                SignupView, UserApprovalView, UserProfileView)
+from api.v1.views.feedback import FeedbackCreateView
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 
@@ -23,7 +24,6 @@ router.register('partners', PartherViewSet, basename='parthers')
 router.register('city', CityViewSet, basename='city')
 router.register('region', RegionViewSet, basename='region')
 
-
 urlpatterns = [
     path('', include(router.urls)),
     path(
@@ -39,5 +39,6 @@ urlpatterns = [
         ChangePasswordView.as_view(),
         name='change-password'
     ),
-    path('auth/profile/', UserProfileView.as_view(), name='user_profile')
+    path('auth/profile/', UserProfileView.as_view(), name='user_profile'),
+    path('feedback/', FeedbackCreateView.as_view(), name='feedback')
 ]

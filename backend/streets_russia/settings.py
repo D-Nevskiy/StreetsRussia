@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'news.apps.NewsConfig',
     'user.apps.UserConfig',
     'partners.apps.PartnersConfig',
+    'feedback.apps.FeedbackConfig',
 ]
 
 MIDDLEWARE = [
