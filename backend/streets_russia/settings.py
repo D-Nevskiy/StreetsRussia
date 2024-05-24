@@ -140,6 +140,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     DEFAULT_API_URL,
+    'http://localhost:3000',
 ]
 
 # SMTP YANDEX
