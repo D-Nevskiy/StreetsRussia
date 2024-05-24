@@ -9,6 +9,7 @@ class TypeEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = TypeEvent
         fields = (
+            'id',
             'name',
         )
 
@@ -17,6 +18,7 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = (
+            'id',
             'name',
             'region',
             'city',
@@ -67,7 +69,7 @@ class RegionSerializer(serializers.ModelSerializer):
 class GalleryEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = GalleryEvent
-        fields = ('file',)
+        fields = ('id', 'file',)
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -123,6 +125,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = (
+            'id',
             'files',
             'title',
             'description',
@@ -141,6 +144,7 @@ class EventSmallReadSerializer(EventSerializer):
     class Meta:
         model = Event
         fields = (
+            'id',
             'title',
             'start_datetime',
             'location',
