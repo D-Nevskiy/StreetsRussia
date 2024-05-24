@@ -1,13 +1,14 @@
+from django.urls import include, path
+from rest_framework.routers import SimpleRouter
+
 from api.v1.views.events import (CityViewSet, DisciplineViewSet, EventViewSet,
                                  RegionViewSet, SubDisciplineViewSet,
                                  TypeEventViewSet)
+from api.v1.views.feedback import FeedbackCreateView
 from api.v1.views.news import CategoryViewSet, NewsViewSet
 from api.v1.views.partners import PartherViewSet
 from api.v1.views.user import (ChangePasswordView, LoginView, LogoutView,
                                SignupView, UserApprovalView, UserProfileView)
-from api.v1.views.feedback import FeedbackCreateView
-from django.urls import include, path
-from rest_framework.routers import SimpleRouter
 
 router = SimpleRouter()
 router.register('events', EventViewSet, basename='events')

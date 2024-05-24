@@ -1,7 +1,8 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from feedback.models import Feedback
+
 from api.v1.serializers.feedback import FeedbackSerializer
+from feedback.models import Feedback
 
 
 class FeedbackCreateView(generics.CreateAPIView):
@@ -17,5 +18,6 @@ class FeedbackCreateView(generics.CreateAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def perform_create(self, serializer):
-        user = self.request.user if self.request.user.is_authenticated else None
+        user = (self.request.user
+                if self.request.user.is_authenticated else None)
         serializer.save(user=user)

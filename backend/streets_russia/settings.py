@@ -145,7 +145,7 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'user': '10000/day',  # Лимит для UserRateThrottle
         'anon': '1000/day',  # Лимит для AnonRateThrottle
-        'feedback_request': '10/hour' # Лимит на POST запрос в feedback
+        'feedback_request': '10/hour'  # Лимит на POST запрос в feedback
     }
 }
 

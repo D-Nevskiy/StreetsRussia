@@ -1,9 +1,9 @@
 from django.db import models
 
-from core.mixins import DateTimeMixin
-from user.models import UserAccount
-from core.validators import validate_phone_number
 from core.constants.user import LEN_PHONE_NUMBER
+from core.mixins import DateTimeMixin
+from core.validators import validate_phone_number
+from user.models import UserAccount
 
 
 class Feedback(DateTimeMixin):
