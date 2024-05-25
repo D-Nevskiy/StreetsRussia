@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from feedback.models import Feedback
+from feedback.models import Feedback, FeedbackProcessing
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
@@ -24,12 +24,35 @@ class FeedbackSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'user',
+            'name',
             'content',
             'email',
             'phone_number',
             'consent_to_rights',
-            'сonsent_to_processing'
+            'consent_to_processing',
+            'status',
         )
         read_only_fields = (
             'user',
+            'status',
+        )
+
+
+class FeedbackProcessingSerializer(serializers.ModelSerializer):
+    feedback = FeedbackSerializer(
+        many=True,
+        source='feedback_processing',
+        read_only=True
+    )
+
+    class Meta:
+        model = FeedbackProcessing
+        fields = (
+            'id',
+            'feedback',
+            'text',
+            'support_agent',
+        )
+        read_only_fields = (
+            'support_agent',
         )

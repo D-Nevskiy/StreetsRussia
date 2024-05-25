@@ -4,7 +4,7 @@ from rest_framework.routers import SimpleRouter
 from api.v1.views.events import (CityViewSet, DisciplineViewSet, EventViewSet,
                                  RegionViewSet, SubDisciplineViewSet,
                                  TypeEventViewSet)
-from api.v1.views.feedback import FeedbackCreateView
+from api.v1.views.feedback import FeedbackView, FeedbackProcessingView
 from api.v1.views.news import CategoryViewSet, NewsViewSet
 from api.v1.views.partners import PartherViewSet
 from api.v1.views.user import (ChangePasswordView, LoginView, LogoutView,
@@ -41,5 +41,7 @@ urlpatterns = [
         name='change-password'
     ),
     path('auth/profile/', UserProfileView.as_view(), name='user_profile'),
-    path('feedback/', FeedbackCreateView.as_view(), name='feedback')
+    path('feedback/', FeedbackView.as_view(), name='feedback'),
+    path('feedback-proc/', FeedbackProcessingView.as_view(),
+         name='feedback_processing'),
 ]
