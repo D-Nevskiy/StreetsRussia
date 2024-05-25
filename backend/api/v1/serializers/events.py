@@ -37,11 +37,14 @@ class DisciplineSerializer(serializers.ModelSerializer):
 
 
 class SubDisciplineSerializer(serializers.ModelSerializer):
+    discipline = DisciplineSerializer()
+
     class Meta:
         model = SubDiscipline
         fields = (
             'id',
             'name',
+            'discipline',
         )
 
 
