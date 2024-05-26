@@ -15,9 +15,9 @@ class Feedback(DateTimeMixin):
         - user (ForeignKey): Пользователь отправивший запрос.
         - name (CharField): Имя отправителя.
         - content (TextField): Содержимое письма
-        - phone_number (BooleanField): Соглашение о правилах
-        - consent_to_rights (BoolField): Номер телефона пользователя
-        - сonsent_to_processing (BoolField): Номер телефона пользователя
+        - phone_number (BooleanField): Номер телефона
+        - consent_to_rights (BoolField): Согласие о правилах
+        - сonsent_to_processing (BoolField): Согласие на обработку данных
         - status (CharField): Статус заявки.
 
     Мета:
@@ -98,7 +98,7 @@ class FeedbackProcessing(DateTimeMixin):
         related_name='feedback_processing'
     )
     text = models.TextField(
-        'Тест ответа'
+        'Текст ответа'
     )
     support_agent = models.ForeignKey(
         UserAccount,
