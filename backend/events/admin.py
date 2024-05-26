@@ -59,3 +59,11 @@ class LocationAdmin(admin.ModelAdmin):
     Класс администратора для модели Location.
     """
     pass
+
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    """
+    Класс администратора для модели City.
+    """
+    pass

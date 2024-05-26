@@ -1,10 +1,11 @@
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
-from api.v1.serializers.feedback import (FeedbackSerializer,
-                                         FeedbackProcessingSerializer)
+from api.v1.serializers.feedback import (FeedbackProcessingSerializer,
+                                         FeedbackSerializer)
 from feedback.models import Feedback, FeedbackProcessing
 from feedback.tasks import send_email_task_feedback
 
@@ -14,6 +15,8 @@ class FeedbackView(generics.CreateAPIView,
                    generics.RetrieveAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('status',)
     throttle_scope = 'feedback_request'
 
     def get_permissions(self):
@@ -47,11 +50,10 @@ class FeedbackProcessingView(generics.CreateAPIView,
         return response
 
     def send_feedback_response_email(self, instance):
-        feedback = instance['feedback']
-        email = feedback['email']
-        subject = f'Ответ на вашу заявку от {feedback["created_at"]}'
-        context = {'subject': subject, 'text': instance['text'],
-                   'obj': feedback}
+        email = instance.get('email')
+        subject = f'Ответ на вашу заявку от {instance.get("created_at")}'
+        context = {'subject': subject, 'text': instance.get('text'),
+                   'obj': instance}
         html_message = render_to_string('response_feedback.html',
                                         context)
         plain_message = strip_tags(html_message)

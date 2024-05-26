@@ -1,13 +1,7 @@
 from django.db import models
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 
-from core.constants.feedback import (
-    LEN_PHONE_NUMBER,
-    LEN_STATUS,
-    STATUS_FEEDBACK,
-    LEN_NAME_FEEDBACK
-)
+from core.constants.feedback import (LEN_NAME_FEEDBACK, LEN_PHONE_NUMBER,
+                                     LEN_STATUS, STATUS_FEEDBACK)
 from core.mixins import DateTimeMixin
 from core.validators import validate_phone_number
 from user.models import UserAccount
@@ -68,7 +62,7 @@ class Feedback(DateTimeMixin):
         'Статус заявки',
         max_length=LEN_STATUS,
         choices=STATUS_FEEDBACK,
-        default=STATUS_FEEDBACK
+        default='PENDING'
     )
 
     class Meta:

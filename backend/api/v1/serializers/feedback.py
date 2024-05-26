@@ -6,8 +6,8 @@ from feedback.models import Feedback, FeedbackProcessing
 class FeedbackSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
-        consent_to_rights = validated_data.pop('consent_to_rights')
-        consent_to_processing = validated_data.pop('сonsent_to_processing')
+        consent_to_rights = validated_data.get('consent_to_rights')
+        consent_to_processing = validated_data.get('consent_to_processing')
         if not consent_to_rights:
             raise serializers.ValidationError(
                 'Необходимо согласие на правила сообщества'
@@ -39,11 +39,14 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
 
 class FeedbackProcessingSerializer(serializers.ModelSerializer):
-    feedback = FeedbackSerializer(
-        many=True,
-        source='feedback_processing',
-        read_only=True
-    )
+    is_closed = serializers.BooleanField(write_only=True)
+
+    def create(self, validated_data):
+        is_closed = validated_data.pop('is_closed')
+        feedback = validated_data.get('feedback')
+        feedback.status = 'CLOSED' if is_closed else 'PENDING'
+        feedback.save()
+        return FeedbackProcessing.objects.create(**validated_data)
 
     class Meta:
         model = FeedbackProcessing
@@ -52,6 +55,7 @@ class FeedbackProcessingSerializer(serializers.ModelSerializer):
             'feedback',
             'text',
             'support_agent',
+            'is_closed',
         )
         read_only_fields = (
             'support_agent',
