@@ -1,3 +1,6 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import mixins, viewsets
+
 from api.v1.permissions import IsAdminOrReadOnly
 from api.v1.serializers.events import (CitySerializer, DisciplineSerializer,
                                        EventSerializer,
@@ -5,10 +8,8 @@ from api.v1.serializers.events import (CitySerializer, DisciplineSerializer,
                                        RegionSerializer,
                                        SubDisciplineSerializer,
                                        TypeEventSerializer)
-from django_filters.rest_framework import DjangoFilterBackend
 from events.models import (City, Discipline, Event, Region, SubDiscipline,
                            TypeEvent)
-from rest_framework import mixins, viewsets
 
 
 class EventViewSet(viewsets.ModelViewSet):

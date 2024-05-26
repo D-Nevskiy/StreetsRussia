@@ -1,3 +1,8 @@
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db import models
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 from core.constants.user import (LEN_FIRST_NAME, LEN_GENDER, LEN_LAST_NAME,
                                  LEN_MIDDLE_NAME, LEN_PASSPORT_ISSUED_BY,
                                  LEN_PASSPORT_NUMBER, LEN_PASSPORT_SERIES,
@@ -5,10 +10,6 @@ from core.constants.user import (LEN_FIRST_NAME, LEN_GENDER, LEN_LAST_NAME,
 from core.mixins import DateTimeMixin
 from core.validators import (validate_full_name, validate_passport_number,
                              validate_passport_series, validate_phone_number)
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.db import models
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
 from user.tasks import send_email_task
 
 

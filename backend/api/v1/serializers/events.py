@@ -1,8 +1,9 @@
+from django.shortcuts import get_object_or_404
+from rest_framework import serializers
+
+from api.v1.serializers.user import UserSmallSerializer
 from events.models import (City, Discipline, Event, GalleryEvent, Location,
                            Region, SubDiscipline, TypeEvent)
-from api.v1.serializers.user import UserSmallSerializer
-from rest_framework import serializers
-from django.shortcuts import get_object_or_404
 
 
 class TypeEventSerializer(serializers.ModelSerializer):

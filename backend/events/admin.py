@@ -29,14 +29,6 @@ class DisciplineAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(City)
-class CityAdmin(admin.ModelAdmin):
-    """
-    Класс администратора для модели City.
-    """
-    pass
-
-
 @admin.register(SubDiscipline)
 class SubDisciplineAdmin(admin.ModelAdmin):
     """
@@ -65,5 +57,13 @@ class TypeEventAdmin(admin.ModelAdmin):
 class LocationAdmin(admin.ModelAdmin):
     """
     Класс администратора для модели Location.
+    """
+    pass
+
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    """
+    Класс администратора для модели City.
     """
     pass
