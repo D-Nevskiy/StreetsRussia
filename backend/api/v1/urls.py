@@ -1,6 +1,7 @@
-from api.v1.views.events import (CityViewSet, DisciplineViewSet, EventViewSet,
+from api.v1.views.events import (CityViewSet, DisciplineViewSet,
+                                 EventRegistrationViewSet, EventViewSet,
                                  RegionViewSet, SubDisciplineViewSet,
-                                 TypeEventViewSet, EventRegistrationViewSet)
+                                 TypeEventViewSet)
 from api.v1.views.news import CategoryViewSet, NewsViewSet
 from api.v1.views.partners import PartherViewSet
 from api.v1.views.user import (ChangePasswordView, LoginView, LogoutView,
