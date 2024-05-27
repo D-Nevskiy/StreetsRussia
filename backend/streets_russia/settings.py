@@ -3,6 +3,7 @@ from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
+from split_settings.tools import include
 
 load_dotenv()
 
@@ -15,6 +16,10 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split()
 
 DB_ENGINE = os.getenv('DB_ENGINE', 'sqlite3')  # sqlite3 или postgresql
+
+include(
+    'components/logging.py',
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',

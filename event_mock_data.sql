@@ -1,12 +1,12 @@
 -- Вставка данных в таблицу UserAccount
-INSERT INTO user_useraccount (id, role, status, first_name, last_name, middle_name, gender, date_of_birth, phone_number, email, city, passport_series, passport_number, passport_issue_date, passport_issued_by, consent_to_rights, сonsent_to_processing, password, created_at, updated_at)
+INSERT INTO user_useraccount (id, role, first_name, last_name, middle_name, gender, date_of_birth, phone_number, email, city, passport_series, passport_number, passport_issue_date, passport_issued_by, consent_to_rights, сonsent_to_processing, password, created_at, updated_at, is_superuser, is_staff, is_active)
 VALUES
-(1, 'USER', 'CONFIRMED', 'Алексей', 'Иванов', '', 'MALE', '1990-01-01', '+79822624975', 'alexey@example.com', 'Москва', '4315', '123457', '2010-01-01', 'ОУФМС РОССИИ ПО МОСКВЕ', true, true, 'hashed_password', now(), now()),
-(2, 'USER', 'CONFIRMED', 'Мария', 'Петрова', '', 'FEMALE', '1992-02-02', '+79822624978', 'maria@example.com', 'Санкт-Петербург', '4316', '654322', '2012-02-02', 'ОУФМС РОССИИ ПО САНКТ-ПЕТЕРБУРГУ', true, true, 'hashed_password', now(), now()),
-(3, 'USER', 'CONFIRMED', 'Иван', 'Сидоров', '', 'MALE', '1985-03-15', '+79822624976', 'ivan@example.com', 'Нижний Новгород', '4317', '987654', '2011-03-15', 'ОУФМС РОССИИ ПО НИЖНЕМУ НОВГОРОДУ', true, true, 'hashed_password', now(), now()),
-(4, 'USER', 'CONFIRMED', 'Ольга', 'Смирнова', '', 'FEMALE', '1991-04-25', '+79822624979', 'olga@example.com', 'Екатеринбург', '4318', '876543', '2012-04-25', 'ОУФМС РОССИИ ПО ЕКАТЕРИНБУРГУ', true, true, 'hashed_password', now(), now()),
-(5, 'REGIONAL_DIRECTOR', 'CONFIRMED', 'Анна', 'Кузнецова', '', 'FEMALE', '1987-06-05', '+79822624980', 'anna@example.com', 'Москва', '4319', '123459', '2010-06-05', 'ОУФМС РОССИИ ПО МОСКВЕ', true, true, 'hashed_password', now(), now()),
-(6, 'REGIONAL_DIRECTOR', 'CONFIRMED', 'Сергей', 'Лебедев', '', 'MALE', '1993-07-15', '+79822624981', 'sergey@example.com', 'Санкт-Петербург', '4320', '654324', '2012-07-15', 'ОУФМС РОССИИ ПО САНКТ-ПЕТЕРБУРГУ', true, true, 'hashed_password', now(), now());
+(1, 'USER', 'Алексей', 'Иванов', '', 'MALE', '1990-01-01', '+79822624975', 'alexey@example.com', 'Москва', '4315', '123457', '2010-01-01', 'ОУФМС РОССИИ ПО МОСКВЕ', true, true, 'hashed_password', now(), now(), false, false, true),
+(2, 'USER', 'Мария', 'Петрова', '', 'FEMALE', '1992-02-02', '+79822624978', 'maria@example.com', 'Санкт-Петербург', '4316', '654322', '2012-02-02', 'ОУФМС РОССИИ ПО САНКТ-ПЕТЕРБУРГУ', true, true, 'hashed_password', now(), now(), false, false, true),
+(3, 'USER', 'Иван', 'Сидоров', '', 'MALE', '1985-03-15', '+79822624976', 'ivan@example.com', 'Нижний Новгород', '4317', '987654', '2011-03-15', 'ОУФМС РОССИИ ПО НИЖНЕМУ НОВГОРОДУ', true, true, 'hashed_password', now(), now(), false, false, true),
+(4, 'USER', 'Ольга', 'Смирнова', '', 'FEMALE', '1991-04-25', '+79822624979', 'olga@example.com', 'Екатеринбург', '4318', '876543', '2012-04-25', 'ОУФМС РОССИИ ПО ЕКАТЕРИНБУРГУ', true, true, 'hashed_password', now(), now(), false, false, true),
+(5, 'REGIONAL_DIRECTOR', 'Анна', 'Кузнецова', '', 'FEMALE', '1987-06-05', '+79822624980', 'anna@example.com', 'Москва', '4319', '123459', '2010-06-05', 'ОУФМС РОССИИ ПО МОСКВЕ', true, true, 'hashed_password', now(), now(), false, false, true),
+(6, 'REGIONAL_DIRECTOR', 'Сергей', 'Лебедев', '', 'MALE', '1993-07-15', '+79822624981', 'sergey@example.com', 'Санкт-Петербург', '4320', '654324', '2012-07-15', 'ОУФМС РОССИИ ПО САНКТ-ПЕТЕРБУРГУ', true, true, 'hashed_password', now(), now(), false, false, true);
 
 -- Вставка данных в таблицу Discipline
 INSERT INTO events_discipline (id, name, created_at, updated_at)
