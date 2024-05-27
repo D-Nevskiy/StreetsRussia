@@ -1,13 +1,14 @@
-from api.v1.views.events import (CityViewSet, DisciplineViewSet,
-                                 EventRegistrationViewSet, EventViewSet,
+from django.urls import include, path
+from rest_framework.routers import SimpleRouter
+
+from api.v1.views.events import (CityViewSet, DisciplineViewSet, EventViewSet,
                                  RegionViewSet, SubDisciplineViewSet,
-                                 TypeEventViewSet)
+                                 TypeEventViewSet, EventRegistrationViewSet)
+from api.v1.views.feedback import FeedbackProcessingView, FeedbackView
 from api.v1.views.news import CategoryViewSet, NewsViewSet
 from api.v1.views.partners import PartherViewSet
 from api.v1.views.user import (ChangePasswordView, LoginView, LogoutView,
                                SignupView, UserApprovalView, UserProfileView)
-from django.urls import include, path
-from rest_framework.routers import SimpleRouter
 
 router = SimpleRouter()
 router.register('events', EventViewSet, basename='events')
@@ -29,7 +30,6 @@ router.register(
     basename='registration-for-the-event'
 )
 
-
 urlpatterns = [
     path('', include(router.urls)),
     path(
@@ -45,5 +45,8 @@ urlpatterns = [
         ChangePasswordView.as_view(),
         name='change-password'
     ),
-    path('auth/profile/', UserProfileView.as_view(), name='user_profile')
+    path('auth/profile/', UserProfileView.as_view(), name='user_profile'),
+    path('feedback/', FeedbackView.as_view(), name='feedback'),
+    path('feedback-proc/', FeedbackProcessingView.as_view(),
+         name='feedback_processing'),
 ]

@@ -1,3 +1,6 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import mixins, viewsets
+
 from api.v1.permissions import IsAdminOrCreateOnly, IsAdminOrReadOnly
 from api.v1.serializers.events import (CitySerializer, DisciplineSerializer,
                                        EventRegistrationSerializer,
@@ -6,17 +9,22 @@ from api.v1.serializers.events import (CitySerializer, DisciplineSerializer,
                                        RegionSerializer,
                                        SubDisciplineSerializer,
                                        TypeEventSerializer)
-from django_filters.rest_framework import DjangoFilterBackend
 from events.models import (City, Discipline, Event, EventRegistration, Region,
                            SubDiscipline, TypeEvent)
-from rest_framework import mixins, viewsets
 
 
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('discipline', 'start_datetime')
+    filterset_fields = (
+        'discipline',
+        'start_datetime',
+        'location__city',
+        'location__region',
+        'discipline',
+        'sub_discipline',
+    )
 
     def get_queryset(self):
         return Event.objects.filter(is_moderation=True)

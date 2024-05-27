@@ -1,9 +1,10 @@
-from api.v1.serializers.user import UserSmallSerializer
 from django.shortcuts import get_object_or_404
+from rest_framework import serializers
+
+from api.v1.serializers.user import UserSmallSerializer
 from events.models import (City, Discipline, Event, EventRegistration,
                            GalleryEvent, Location, Region, SubDiscipline,
                            TypeEvent)
-from rest_framework import serializers
 
 
 class TypeEventSerializer(serializers.ModelSerializer):
@@ -38,11 +39,14 @@ class DisciplineSerializer(serializers.ModelSerializer):
 
 
 class SubDisciplineSerializer(serializers.ModelSerializer):
+    discipline = DisciplineSerializer()
+
     class Meta:
         model = SubDiscipline
         fields = (
             'id',
             'name',
+            'discipline',
         )
 
 
@@ -84,6 +88,8 @@ class EventSerializer(serializers.ModelSerializer):
     type_of_event = TypeEventSerializer()
     location = LocationSerializer()
     author = UserSmallSerializer(read_only=True)
+    start_datetime = serializers.DateTimeField(format='%d.%m.%Y %I:%M')
+    end_datetime = serializers.DateTimeField(format='%d.%m.%Y %I:%M')
 
     def create(self, validated_data):
         discipline_data = validated_data.pop('discipline')
@@ -149,6 +155,8 @@ class EventSmallReadSerializer(EventSerializer):
             'title',
             'start_datetime',
             'location',
+            'discipline',
+            'sub_discipline',
             'files',
             'author',
             'organizers_contact',
