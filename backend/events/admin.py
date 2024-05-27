@@ -1,7 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 
 from .models import (City, Discipline, Event, GalleryEvent, Location, Region,
-                     SubDiscipline, TypeEvent)
+                     SubDiscipline, TypeEvent, EventRegistration)
 
 
 class GalleryEventInline(admin.TabularInline):
@@ -13,12 +13,23 @@ class GalleryEventInline(admin.TabularInline):
     model = GalleryEvent
 
 
+@admin.action(description='Подтвердить выбранное мероприятие')
+def confirm_event(modeladmin, request, queryset):
+    queryset.update(is_moderation=True)
+    modeladmin.message_user(
+        request,
+        f'Мероприятие(я) {queryset} подтверждено(ы)',
+        messages.SUCCESS
+    )
+
+
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     """
     Класс администратора для модели Event.
     """
     inlines = (GalleryEventInline,)
+    actions = [confirm_event,]
 
 
 @admin.register(Discipline)
@@ -65,5 +76,13 @@ class TypeEventAdmin(admin.ModelAdmin):
 class LocationAdmin(admin.ModelAdmin):
     """
     Класс администратора для модели Location.
+    """
+    pass
+
+
+@admin.register(EventRegistration)
+class EventRegistrationAdmin(admin.ModelAdmin):
+    """
+    Класс администратора для модели Registration
     """
     pass
