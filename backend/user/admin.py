@@ -19,3 +19,12 @@ class UserAccountAdmin(admin.ModelAdmin):
     Конфигурация модели UserAccount для административной панели.
     """
     actions = [confirm_user]
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(
+            role=UserAccount.Role.REGIONAL_DIRECTOR,
+            regions__owner=request.user
+        ).distinct()

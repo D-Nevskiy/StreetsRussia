@@ -1,7 +1,8 @@
 from django.contrib import admin, messages
-
-from .models import (City, Discipline, Event, GalleryEvent, Location, Region,
-                     SubDiscipline, TypeEvent, EventRegistration)
+from events.models import (City, Discipline, Event, EventRegistration,
+                           GalleryEvent, Location, Region, SubDiscipline,
+                           TypeEvent)
+from user.models import UserAccount
 
 
 class GalleryEventInline(admin.TabularInline):
@@ -30,6 +31,21 @@ class EventAdmin(admin.ModelAdmin):
     """
     inlines = (GalleryEventInline,)
     actions = [confirm_event,]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser or \
+                request.user.role == UserAccount.Role.ADMIN:
+            return qs
+        return qs.filter(location__region__owner=request.user)
+
+    def has_view_permission(self, request, obj=None):
+        if (request.user.is_superuser or
+                request.user.role == UserAccount.Role.ADMIN):
+            return True
+        if obj is None:
+            return True
+        return obj.location.region.owner == request.user
 
 
 @admin.register(Discipline)
