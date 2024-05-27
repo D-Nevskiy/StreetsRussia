@@ -2,7 +2,7 @@ name: StreetsRussia workflow
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
 
 
 jobs:
