@@ -50,7 +50,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 class UserApprovalSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
-        fields = ['id']
+        fields = ('id',)
 
 
 class UserSmallSerializer(serializers.ModelSerializer):

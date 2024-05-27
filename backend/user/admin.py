@@ -18,7 +18,7 @@ class UserAccountAdmin(admin.ModelAdmin):
     """
     Конфигурация модели UserAccount для административной панели.
     """
-    actions = [confirm_user]
+    actions = (confirm_user,)
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)

@@ -1,5 +1,3 @@
-import logging
-
 from core.constants.user import (LEN_FIRST_NAME, LEN_GENDER, LEN_LAST_NAME,
                                  LEN_MIDDLE_NAME, LEN_PASSPORT_ISSUED_BY,
                                  LEN_PASSPORT_NUMBER, LEN_PASSPORT_SERIES,
@@ -14,8 +12,6 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
 from user.tasks import send_email_task
-
-logger = logging.getLogger(__name__)
 
 
 class UserAccountManager(BaseUserManager):
@@ -92,10 +88,6 @@ class UserAccountManager(BaseUserManager):
         user.set_password(temporary_password)
         user.is_active = True
         user.save()
-        logger.info(
-            f'Временный пароль {temporary_password}'
-            f' для пользователя {user.email}'
-        )
         self.send_temporary_password_email(user.email, temporary_password)
 
 
