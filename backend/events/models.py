@@ -266,12 +266,6 @@ class Location(DateTimeMixin):
     def __str__(self):
         return f'{self.name}: {self.city.name}'
 
-    def clean(self):
-        if (self.region and self.city) and self.city != self.region.city:
-            raise ValidationError(
-                'Город должен принадлежать региону'
-            )
-
 
 class Event(DateTimeMixin):
     """
