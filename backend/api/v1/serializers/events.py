@@ -87,6 +87,8 @@ class EventSerializer(serializers.ModelSerializer):
     type_of_event = TypeEventSerializer()
     location = LocationSerializer()
     author = UserSmallSerializer(read_only=True)
+    start_datetime = serializers.DateTimeField(format='%d.%m.%Y %I:%M')
+    end_datetime = serializers.DateTimeField(format='%d.%m.%Y %I:%M')
 
     def create(self, validated_data):
         discipline_data = validated_data.pop('discipline')

@@ -38,6 +38,7 @@ class UserAccountManager(BaseUserManager):
         обновляя статус пользователя на подтвержденный и отправляя
         электронное письмо с временным паролем.
     """
+
     def create_superuser(self, email, password):
         user = self.create_user(
             email=email,
@@ -62,10 +63,11 @@ class UserAccountManager(BaseUserManager):
     def generate_temporary_password(self):
         return UserAccount.objects.make_random_password()
 
-    def send_temporary_password_email(self, email, temporary_password):
-        subject = 'Временный пароль.'
-        context = {'temporary_password': temporary_password}
-        html_message = render_to_string('temporary_password.html', context)
+    def send_temporary_password_email(self, email, temporary_password, name):
+        subject = 'Ваша заявка на вступление в организацию принята!'
+        context = {'temporary_password': temporary_password, 'name': name}
+        html_message = render_to_string('temporary_password.html',
+                                        context)
         plain_message = strip_tags(html_message)
         send_email_task.delay(
             subject,
@@ -79,7 +81,11 @@ class UserAccountManager(BaseUserManager):
         user.set_password(temporary_password)
         user.status = UserAccount.Status.CONFIRMED
         user.save()
-        self.send_temporary_password_email(user.email, temporary_password)
+        self.send_temporary_password_email(
+            user.email,
+            temporary_password,
+            user.first_name
+        )
 
 
 class UserAccount(AbstractBaseUser, DateTimeMixin):
@@ -111,6 +117,7 @@ class UserAccount(AbstractBaseUser, DateTimeMixin):
         при создании суперпользователя.
         objects (UserAccountManager): Менеджер модели UserAccount.
     """
+
     class Role(models.TextChoices):
         ADMIN = "ADMIN", "admin"
         USER = "USER", "user"

@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django_filters.rest_framework import DjangoFilterBackend
@@ -50,10 +51,12 @@ class FeedbackProcessingView(generics.CreateAPIView,
         return response
 
     def send_feedback_response_email(self, instance):
-        email = instance.get('email')
-        subject = f'Ответ на вашу заявку от {instance.get("created_at")}'
+        feedback = get_object_or_404(Feedback, pk=instance.get('feedback'))
+        email = feedback.email
+        subject = (f'Ответ на вашу заявку от '
+                   f'{feedback.created_at.strftime("%d.%m.%Y")}')
         context = {'subject': subject, 'text': instance.get('text'),
-                   'obj': instance}
+                   'obj': feedback}
         html_message = render_to_string('response_feedback.html',
                                         context)
         plain_message = strip_tags(html_message)
