@@ -16,7 +16,14 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('discipline', 'start_datetime')
+    filterset_fields = (
+        'discipline',
+        'start_datetime',
+        'location__city',
+        'location__region',
+        'discipline',
+        'sub_discipline',
+    )
 
     def get_queryset(self):
         return Event.objects.filter(is_moderation=True)

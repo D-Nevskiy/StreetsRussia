@@ -152,6 +152,8 @@ class EventSmallReadSerializer(EventSerializer):
             'title',
             'start_datetime',
             'location',
+            'discipline',
+            'sub_discipline',
             'files',
             'author',
             'organizers_contact',
