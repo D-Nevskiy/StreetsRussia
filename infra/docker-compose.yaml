@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+
+  db:
+    container_name: street_russia-db
+    image: postgres:15-alpine3.18
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+
+  web:
+    container_name: street_russia-backend
+    depends_on:
+      - db
+    restart: always
+    image: dnevskiy/streets_backend:latest
+    volumes:
+      - static:/app/static/
+    env_file:
+      - .env
+    command: sh -c "python manage.py collectstatic --noinput &&
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      gunicorn streets_russia.wsgi:application --bind 0:8000"
+
+  celery:
+    image: dnevskiy/streets_backend:latest
+    command: celery -A streets_russia worker --loglevel=info
+    depends_on:
+      - redis
+    env_file:
+      - .env
+
+  redis:
+    image: redis:latest
+
+  frontend:
+    container_name: street_russia-frontend
+    depends_on:
+      - web
+    image: dnevskiy/streets_frontend:latest
+    volumes:
+      - static_front:/app/dist/
+
+
+  nginx:
+    container_name: street_russia-nginx
+    depends_on:
+      - web
+      - frontend
+    restart: always
+    image: dnevskiy/streets_nginx:latest
+    volumes:
+      - static:/var/html/static/
+      - static_front:/usr/share/nginx/html
+    ports:
+      - "8500:80"
+
+volumes:
+  static:
+  static_front:
+  db_data:
