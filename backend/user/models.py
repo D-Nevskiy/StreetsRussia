@@ -88,7 +88,11 @@ class UserAccountManager(BaseUserManager):
         user.set_password(temporary_password)
         user.is_active = True
         user.save()
-        self.send_temporary_password_email(user.email, temporary_password)
+        self.send_temporary_password_email(
+            user.email,
+            temporary_password,
+            user.first_name
+        )
 
 
 class UserAccount(AbstractBaseUser, DateTimeMixin, PermissionsMixin):
