@@ -381,3 +381,44 @@ class Event(DateTimeMixin):
                 raise ValidationError(
                     'Дата и время начала мероприятия не могут быть в прошлом.'
                 )
+
+
+class EventRegistration(DateTimeMixin):
+    """
+    Модель, представляющая мероприятие.
+
+    Атрибуты:
+        user (ForeignKey): Пользователь, зарегистрированный на меропритие.
+        event (ForeignKey): Мероприятие.
+
+    Мета:
+        verbose_name (str): Название модели в единственном числе.
+        verbose_name_plural (str): Название модели во множественном числе.
+        constraints (UniqueConstraint): уникальная пара значений.
+
+    Методы:
+        __str__(): Возвращает строковое представление мероприятия.
+    """
+    user = models.ForeignKey(
+        UserAccount,
+        verbose_name='Пользователь',
+        on_delete=models.CASCADE
+    )
+    event = models.ForeignKey(
+        Event,
+        verbose_name='Мероприятие',
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = 'Регистрация на мероприятие'
+        verbose_name_plural = 'Регистрации на мероприятии'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'event'],
+                name='unique_registration_for_event'
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user} зарегистрирован на меропритие {self.event}'

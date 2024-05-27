@@ -1,8 +1,3 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.db import models
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-
 from core.constants.user import (LEN_FIRST_NAME, LEN_GENDER, LEN_LAST_NAME,
                                  LEN_MIDDLE_NAME, LEN_PASSPORT_ISSUED_BY,
                                  LEN_PASSPORT_NUMBER, LEN_PASSPORT_SERIES,
@@ -10,6 +5,12 @@ from core.constants.user import (LEN_FIRST_NAME, LEN_GENDER, LEN_LAST_NAME,
 from core.mixins import DateTimeMixin
 from core.validators import (validate_full_name, validate_passport_number,
                              validate_passport_series, validate_phone_number)
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin)
+from django.db import models, transaction
+from django.template.loader import render_to_string
+from django.utils import timezone
+from django.utils.html import strip_tags
 from user.tasks import send_email_task
 
 
@@ -38,26 +39,31 @@ class UserAccountManager(BaseUserManager):
         обновляя статус пользователя на подтвержденный и отправляя
         электронное письмо с временным паролем.
     """
+    def create_superuser(self, email, password, **extra_fields):
 
-    def create_superuser(self, email, password):
-        user = self.create_user(
-            email=email,
-            password=password
-        )
-        user.role = UserAccount.Role.ADMIN
-        user.status = UserAccount.Status.CONFIRMED
-        user.save(using=self._db)
-        return user
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('role', UserAccount.Role.ADMIN)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+        return self.create_user(email, password, **extra_fields)
 
     def create_user(self, email, password=None, **extra_fields):
+
+        if not email:
+            raise ValueError("The Email must be set")
+        email = self.normalize_email(email)
         user = self.model(
             email=email,
-            status=UserAccount.Status.UNCONFIRMED,
             **extra_fields
         )
         if password:
             user.set_password(password)
-        user.save(using=self._db)
+        user.save()
         return user
 
     def generate_temporary_password(self):
@@ -76,25 +82,21 @@ class UserAccountManager(BaseUserManager):
             html_message=html_message
         )
 
+    @transaction.atomic
     def approve_user(self, user):
         temporary_password = self.generate_temporary_password()
         user.set_password(temporary_password)
-        user.status = UserAccount.Status.CONFIRMED
+        user.is_active = True
         user.save()
-        self.send_temporary_password_email(
-            user.email,
-            temporary_password,
-            user.first_name
-        )
+        self.send_temporary_password_email(user.email, temporary_password)
 
 
-class UserAccount(AbstractBaseUser, DateTimeMixin):
+class UserAccount(AbstractBaseUser, DateTimeMixin, PermissionsMixin):
     """
     Модель учетной записи пользователя.
 
     Атрибуты:
         role (CharField): Роль пользователя.
-        status (CharField): Статус пользователя.
         first_name (CharField): Имя пользователя.
         last_name (CharField): Фамилия пользователя.
         middle_name (CharField): Отчество пользователя.
@@ -123,28 +125,16 @@ class UserAccount(AbstractBaseUser, DateTimeMixin):
         USER = "USER", "user"
         REGIONAL_DIRECTOR = "REGIONAL_DIRECTOR", "regional_director"
 
-    class Status(models.TextChoices):
-        UNCONFIRMED = "UNCONFIRMED", "Unconfirmed"
-        CONFIRMED = "CONFIRMED", "Confirmed"
-
     class Gender(models.TextChoices):
         MALE = "MALE", "male"
         FEMALE = "FEMALE", "female"
 
     role = models.CharField(
-        max_length=20,
+        max_length=LEN_ROLE,
         choices=Role.choices,
         default=Role.USER,
         verbose_name='Роль'
     )
-
-    status = models.CharField(
-        max_length=LEN_ROLE,
-        choices=Status.choices,
-        default=Status.UNCONFIRMED,
-        verbose_name='Статус'
-    )
-
     first_name = models.CharField(
         max_length=LEN_FIRST_NAME,
         validators=[validate_full_name],
@@ -158,14 +148,19 @@ class UserAccount(AbstractBaseUser, DateTimeMixin):
     middle_name = models.CharField(
         max_length=LEN_MIDDLE_NAME,
         validators=[validate_full_name],
-        verbose_name='Отчество'
+        verbose_name='Отчество',
+        null=True,
+        blank=True
     )
     gender = models.CharField(
         max_length=LEN_GENDER,
         choices=Gender.choices,
         verbose_name='Пол'
     )
-    date_of_birth = models.DateField(null=True, verbose_name='Дата рождения')
+    date_of_birth = models.DateField(
+        default=timezone.now,
+        verbose_name='Дата рождения'
+    )
     phone_number = models.CharField(
         max_length=LEN_PHONE_NUMBER,
         unique=True,
@@ -185,22 +180,24 @@ class UserAccount(AbstractBaseUser, DateTimeMixin):
         verbose_name='Номер паспорта'
     )
     passport_issue_date = models.DateField(
-        null=True,
-        verbose_name='Дата выдачи паспорта'
+        verbose_name='Дата выдачи паспорта',
+        default=timezone.now
     )
     passport_issued_by = models.CharField(
         max_length=LEN_PASSPORT_ISSUED_BY,
         verbose_name='Кем выдан паспорт'
     )
-
     consent_to_rights = models.BooleanField(
-        default=False,
-        verbose_name='Согласие с правилами'
+        verbose_name='Согласие с правилами',
+        default=False
     )
     сonsent_to_processing = models.BooleanField(
-        default=False,
-        verbose_name='Согласие на обработку данных'
+        verbose_name='Согласие на обработку данных',
+        default=False
     )
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -215,7 +212,7 @@ class UserAccount(AbstractBaseUser, DateTimeMixin):
         return f'{self.email}'
 
     def has_perm(self, perm, obj=None):
-        return self.role == UserAccount.Role.ADMIN
+        return self.is_superuser
 
     def has_module_perms(self, app_label):
         return True
@@ -224,7 +221,3 @@ class UserAccount(AbstractBaseUser, DateTimeMixin):
         if not self.role or self.role is None:
             self.role = UserAccount.Role.USER
         return super().save(*args, **kwargs)
-
-    @property
-    def is_staff(self):
-        return self.role == UserAccount.Role.ADMIN

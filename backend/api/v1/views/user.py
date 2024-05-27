@@ -98,7 +98,7 @@ class UserApprovalView(generics.UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         user = self.get_object()
-        if user.status == UserAccount.Status.UNCONFIRMED:
+        if not user.is_active:
             UserAccount.objects.approve_user(user)
             return Response(
                 {'message': 'Данные пользователя верны. '

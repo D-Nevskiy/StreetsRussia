@@ -2,8 +2,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from api.v1.serializers.user import UserSmallSerializer
-from events.models import (City, Discipline, Event, GalleryEvent, Location,
-                           Region, SubDiscipline, TypeEvent)
+from events.models import (City, Discipline, Event, EventRegistration,
+                           GalleryEvent, Location, Region, SubDiscipline,
+                           TypeEvent)
 
 
 class TypeEventSerializer(serializers.ModelSerializer):
@@ -160,3 +161,23 @@ class EventSmallReadSerializer(EventSerializer):
             'author',
             'organizers_contact',
         )
+
+
+class EventRegistrationSerializer(serializers.ModelSerializer):
+    user = UserSmallSerializer(read_only=True)
+
+    class Meta:
+        model = EventRegistration
+        fields = ('user', 'event',)
+
+    def validate(self, data):
+        request = self.context.get('request')
+        user = request.user
+        event = data['event']
+
+        if EventRegistration.objects.filter(user=user, event=event).exists():
+            raise serializers.ValidationError({
+                'unique_error': 'Вы уже зарегистрировались на это мероприятие.'
+            })
+
+        return data

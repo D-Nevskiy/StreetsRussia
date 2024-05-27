@@ -1,15 +1,16 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, viewsets
 
-from api.v1.permissions import IsAdminOrReadOnly
+from api.v1.permissions import IsAdminOrCreateOnly, IsAdminOrReadOnly
 from api.v1.serializers.events import (CitySerializer, DisciplineSerializer,
+                                       EventRegistrationSerializer,
                                        EventSerializer,
                                        EventSmallReadSerializer,
                                        RegionSerializer,
                                        SubDisciplineSerializer,
                                        TypeEventSerializer)
-from events.models import (City, Discipline, Event, Region, SubDiscipline,
-                           TypeEvent)
+from events.models import (City, Discipline, Event, EventRegistration, Region,
+                           SubDiscipline, TypeEvent)
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -82,3 +83,14 @@ class RegionViewSet(mixins.ListModelMixin,
     permission_classes = (IsAdminOrReadOnly,)
     serializer_class = RegionSerializer
     filter_backends = (DjangoFilterBackend,)
+
+
+class EventRegistrationViewSet(viewsets.ModelViewSet):
+    queryset = EventRegistration.objects.all()
+    serializer_class = EventRegistrationSerializer
+    permission_classes = (IsAdminOrCreateOnly,)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('user', 'event')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
