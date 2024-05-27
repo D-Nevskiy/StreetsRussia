@@ -2,7 +2,6 @@ from django.contrib import admin, messages
 from events.models import (City, Discipline, Event, EventRegistration,
                            GalleryEvent, Location, Region, SubDiscipline,
                            TypeEvent)
-from user.models import UserAccount
 
 
 class GalleryEventInline(admin.TabularInline):
