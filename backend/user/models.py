@@ -203,6 +203,7 @@ class UserAccount(AbstractBaseUser, DateTimeMixin, PermissionsMixin):
     )
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -217,7 +218,7 @@ class UserAccount(AbstractBaseUser, DateTimeMixin, PermissionsMixin):
         return f'{self.email}'
 
     def has_perm(self, perm, obj=None):
-        return self.role == UserAccount.Role.ADMIN
+        return self.is_superuser
 
     def has_module_perms(self, app_label):
         return True
@@ -226,10 +227,3 @@ class UserAccount(AbstractBaseUser, DateTimeMixin, PermissionsMixin):
         if not self.role or self.role is None:
             self.role = UserAccount.Role.USER
         return super().save(*args, **kwargs)
-
-    @property
-    def is_staff(self):
-        return self.role in {
-            UserAccount.Role.ADMIN,
-            UserAccount.Role.REGIONAL_DIRECTOR
-        }
