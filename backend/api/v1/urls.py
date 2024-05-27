@@ -1,6 +1,6 @@
 from api.v1.views.events import (CityViewSet, DisciplineViewSet, EventViewSet,
                                  RegionViewSet, SubDisciplineViewSet,
-                                 TypeEventViewSet)
+                                 TypeEventViewSet, EventRegistrationViewSet)
 from api.v1.views.news import CategoryViewSet, NewsViewSet
 from api.v1.views.partners import PartherViewSet
 from api.v1.views.user import (ChangePasswordView, LoginView, LogoutView,
@@ -22,12 +22,17 @@ router.register('category', CategoryViewSet, basename='category')
 router.register('partners', PartherViewSet, basename='parthers')
 router.register('city', CityViewSet, basename='city')
 router.register('region', RegionViewSet, basename='region')
+router.register(
+    'registration-for-the-event',
+    EventRegistrationViewSet,
+    basename='registration-for-the-event'
+)
 
 
 urlpatterns = [
     path('', include(router.urls)),
     path(
-        'user/approve/<uuid:pk>/',
+        'user/approve/<int:pk>/',
         UserApprovalView.as_view(),
         name='useraccount-approve'
     ),
