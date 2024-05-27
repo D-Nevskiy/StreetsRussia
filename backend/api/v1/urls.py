@@ -28,7 +28,7 @@ router.register('region', RegionViewSet, basename='region')
 urlpatterns = [
     path('', include(router.urls)),
     path(
-        'user/approve/<uuid:pk>/',
+        'user/approve/<int:pk>/',
         UserApprovalView.as_view(),
         name='useraccount-approve'
     ),
